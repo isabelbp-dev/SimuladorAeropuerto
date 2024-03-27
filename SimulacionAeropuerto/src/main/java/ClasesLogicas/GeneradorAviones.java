@@ -1,3 +1,9 @@
+package ClasesLogicas;
+
+
+import ClasesLogicas.Avion;
+import ClasesLogicas.Aeropuerto;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -18,8 +24,13 @@ public class GeneradorAviones implements Runnable{
     public void run() {
         for(int i = 0; i < 8000; i++){
             try{
-                Thread avion = new Thread(new Avion(String.format("%04d", i), aero1));
-                avion.start();
+                if(i%2 == 0){
+                    Thread avion = new Thread(new Avion(String.format("%04d", i), aero1));
+                    avion.start();
+                }else{
+                    Thread avion = new Thread(new Avion(String.format("%04d", i), aero2));
+                    avion.start();
+                }
                 Thread.sleep(1000+(int)(Math.random()*2000));
             }catch(InterruptedException e){
                 e.printStackTrace();

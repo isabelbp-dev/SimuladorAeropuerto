@@ -1,4 +1,7 @@
+package ClasesLogicas;
 
+
+import ClasesLogicas.Aeropuerto;
 import static java.lang.Math.*;
 
 /*
@@ -11,6 +14,8 @@ import static java.lang.Math.*;
  * @author isaba
  */
 import java.util.Random; 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Avion implements Runnable{
     Random random = new Random();
@@ -19,15 +24,26 @@ public class Avion implements Runnable{
     private int ocupacion;
     private Aeropuerto aero;
     
-    public Avion(String cod, Aeropuerto aero){
+    public Avion(String cod, Aeropuerto aeropuerto){
+        aero = aeropuerto;
         this.capacidad = (int) ((Math.random()*200)+100);
         this.ocupacion = 0;
         char letra1 = (char) ('A' + random.nextInt(26));
         char letra2 = (char) ('A' + random.nextInt(26));
         this.id = Character.toString(letra1) + Character.toString(letra2)+ "-"+cod;
-        System.out.println("Se ha creado el avión: " + id);
     }
     public void run() {
-        
+        while(true){
+            try {
+                aero.llegadaHangar(id);
+                int puerta = aero.solPuertaEmbarque(id);
+                aero.salidaHangar(id);
+                Thread.sleep(2000+(int)(Math.random()*3000));
+                aero.liberarPuerta(puerta);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
 }
