@@ -3,6 +3,7 @@ package ClasesLogicas;
 
 import Interfaz.InterfazSimulador;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,6 +24,7 @@ public class Aeropuerto {
     private int ocupacion;
     private InterfazSimulador simulador;
     ArrayList<String> puertasEmbarque = new ArrayList<>(Collections.nCopies(6,null));
+    ArrayList<String> pistas = new ArrayList<>(Collections.nCopies(4, null));
     HashSet<String> hangar = new HashSet<>();
     
     //Atributos para la comunicación y sincronización de...
@@ -34,6 +36,10 @@ public class Aeropuerto {
     private final Lock puertas = new ReentrantLock(true);
     Condition puertaEmbarque = puertas.newCondition();
     Condition puertaDesembarque = puertas.newCondition();
+    
+    //de pistas de aterrizaje/despegue
+    private final Semaphore semPistas = new Semaphore(4, true);
+    private final Lock lPistas = new ReentrantLock();
     
     public Aeropuerto(InterfazSimulador s, String n){
         ocupacion = 0;
@@ -158,6 +164,51 @@ public class Aeropuerto {
             simulador.modPuertasM(puerta, id);
         }else{
             simulador.modPuertasB(puerta, id);
+        }
+    }
+    
+    public void solPistaDespegue(String id) throws InterruptedException{
+        semPistas.acquire();
+        int pista = pistas.indexOf(null);
+        ocuparPista(pista, id);
+        Thread.sleep(1000+(int)(Math.random()*2000));
+        liberarPista(pista);
+        semPistas.release();
+    }
+    
+    public void solPistaAterrizaje(String id) throws InterruptedException{
+        boolean encontrada;
+        encontrada = semPistas.tryAcquire();
+        while(!encontrada){
+            Thread.sleep(1000+(int)(Math.random()*4000));
+            encontrada = semPistas.tryAcquire();
+        }
+        int pista = pistas.indexOf(null);
+        ocuparPista(pista, id);
+        Thread.sleep(1000+(int)(Math.random()*4000));
+        liberarPista(pista);
+        semPistas.release();
+    }
+    
+    public void ocuparPista(int pista, String id){
+        lPistas.lock();
+        pistas.set(pista, id);
+        actualizarPistas(pista, id);
+        lPistas.unlock();
+    }
+    
+    public void liberarPista(int pista){
+        lPistas.lock();
+        pistas.set(pista, null);
+        actualizarPistas(pista, null);
+        lPistas.unlock();
+    }
+    
+    public void actualizarPistas(int pista, String id){
+        if(nombre == "Madrid"){
+            simulador.modPistasM(pista, id);
+        }else{
+            simulador.modPistasB(pista, id);
         }
     }
 }

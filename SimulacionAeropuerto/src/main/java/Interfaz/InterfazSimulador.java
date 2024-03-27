@@ -17,6 +17,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final Lock modBus1 = new ReentrantLock();
     private final JTextField[] puertasM;
     private final JTextField[] puertasB;
+    private final JTextField[] pistasM;
+    private final JTextField[] pistasB;
 
     /**
      * Creates new form InterfazSimulador
@@ -26,6 +28,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         initComponents();
         this.puertasM = new JTextField[]{puerta1M, puerta2M, puerta3M, puerta4M, puerta5M, puerta6M};
         this.puertasB = new JTextField[]{puerta1B, puerta2B, puerta3B, puerta4B, puerta5B, puerta6B};
+        this.pistasM = new JTextField[]{pista1M, pista2M, pista3M, pista4M};
+        this.pistasB = new JTextField[]{pista1B, pista2B, pista3B, pista4B};
         this.setLocationRelativeTo(null);
     }
     
@@ -68,13 +72,19 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
     
     //Modificaciones de las puertas
-    public void modPuertasM(int puerta, String id){
-        
+    public void modPuertasM(int puerta, String id){  
         puertasM[puerta].setText(id);
     }
-    
     public void modPuertasB(int puerta, String id){
         puertasB[puerta].setText(id);
+    }
+    
+    //Modificaciones de las pistas
+    public void modPistasM(int pista, String id){
+        pistasM[pista].setText(id);
+    }
+    public void modPistasB(int pista, String id){
+        pistasB[pista].setText(id);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -114,13 +124,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
         puerta6M = new javax.swing.JTextField();
         puerta4M = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
-        jTextField15 = new javax.swing.JTextField();
+        pista1M = new javax.swing.JTextField();
+        pista3M = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jTextField16 = new javax.swing.JTextField();
-        jTextField17 = new javax.swing.JTextField();
+        pista2M = new javax.swing.JTextField();
+        pista4M = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -151,13 +161,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
         puerta6B = new javax.swing.JTextField();
         puerta4B = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
-        jTextField31 = new javax.swing.JTextField();
-        jTextField32 = new javax.swing.JTextField();
+        pista1B = new javax.swing.JTextField();
+        pista3B = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
-        jTextField33 = new javax.swing.JTextField();
-        jTextField34 = new javax.swing.JTextField();
+        pista2B = new javax.swing.JTextField();
+        pista4B = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -206,7 +216,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel9.setText("Puerta 3:");
         jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
-        jLabel10.setText("Pista 2:");
+        jLabel10.setText("Pista 3:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
 
         jLabel11.setText("Puerta 5:");
@@ -226,8 +236,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel14.setText("Puerta 1:");
         jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
-        jPanel2.add(jTextField14, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 110, -1));
-        jPanel2.add(jTextField15, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
+        jPanel2.add(pista1M, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 110, -1));
+        jPanel2.add(pista3M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
 
         jLabel15.setText("Puerta 4:");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
@@ -235,10 +245,10 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel16.setText("Pista 4:");
         jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
 
-        jLabel17.setText("Pista 3:");
+        jLabel17.setText("Pista 2:");
         jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
-        jPanel2.add(jTextField16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
-        jPanel2.add(jTextField17, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
+        jPanel2.add(pista2M, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
+        jPanel2.add(pista4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
         jButton1.setText("Pausar");
 
@@ -283,7 +293,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel26.setText("Puerta 3:");
         jPanel4.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
-        jLabel27.setText("Pista 2:");
+        jLabel27.setText("Pista 3:");
         jPanel4.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
 
         jLabel28.setText("Puerta 5:");
@@ -303,8 +313,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel31.setText("Puerta 1:");
         jPanel4.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
-        jPanel4.add(jTextField31, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 110, -1));
-        jPanel4.add(jTextField32, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
+        jPanel4.add(pista1B, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 110, -1));
+        jPanel4.add(pista3B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
 
         jLabel32.setText("Puerta 4:");
         jPanel4.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
@@ -312,10 +322,10 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel33.setText("Pista 4:");
         jPanel4.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
 
-        jLabel34.setText("Pista 3:");
+        jLabel34.setText("Pista 2:");
         jPanel4.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
-        jPanel4.add(jTextField33, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
-        jPanel4.add(jTextField34, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
+        jPanel4.add(pista2B, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
+        jPanel4.add(pista4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aerovías", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
@@ -448,22 +458,22 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField31;
-    private javax.swing.JTextField jTextField32;
-    private javax.swing.JTextField jTextField33;
-    private javax.swing.JTextField jTextField34;
     private javax.swing.JTextField jTextField35;
     private javax.swing.JTextField jTextField36;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField pista1B;
+    private javax.swing.JTextField pista1M;
+    private javax.swing.JTextField pista2B;
+    private javax.swing.JTextField pista2M;
+    private javax.swing.JTextField pista3B;
+    private javax.swing.JTextField pista3M;
+    private javax.swing.JTextField pista4B;
+    private javax.swing.JTextField pista4M;
     private javax.swing.JTextField puerta1B;
     private javax.swing.JTextField puerta1M;
     private javax.swing.JTextField puerta2B;

@@ -38,8 +38,18 @@ public class Avion implements Runnable{
                 aero.llegadaHangar(id);
                 int puerta = aero.solPuertaEmbarque(id);
                 aero.salidaHangar(id);
-                Thread.sleep(2000+(int)(Math.random()*3000));
+                int ocupacion = aero.salidaPasajeros(capacidad);
+                Thread.sleep(1000+(int)(Math.random()*2000));
+                int i = 0;
+                while((i <2) && (ocupacion < capacidad)){
+                    Thread.sleep(1000+(int)(Math.random()*4000));
+                    ocupacion += aero.salidaPasajeros(capacidad - ocupacion);
+                    Thread.sleep(1000+(int)(Math.random()*2000));
+                }
                 aero.liberarPuerta(puerta);
+                Thread.sleep(1000+(int)(Math.random()*4000));
+                aero.solPistaDespegue(id);
+                
             } catch (InterruptedException ex) {
                 Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
             }
