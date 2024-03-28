@@ -26,6 +26,7 @@ public class Aeropuerto {
     ArrayList<String> puertasEmbarque = new ArrayList<>(Collections.nCopies(6,null));
     ArrayList<String> pistas = new ArrayList<>(Collections.nCopies(4, null));
     HashSet<String> hangar = new HashSet<>();
+    HashSet<String> rodaje = new HashSet<>();
     
     //Atributos para la comunicación y sincronización de...
     //de buses
@@ -40,6 +41,10 @@ public class Aeropuerto {
     //de pistas de aterrizaje/despegue
     private final Semaphore semPistas = new Semaphore(4, true);
     private final Lock lPistas = new ReentrantLock();
+    
+    //de hangar y rodaje
+    private final Lock lHangar = new ReentrantLock();
+    private final Lock lRodaje = new ReentrantLock();
     
     public Aeropuerto(InterfazSimulador s, String n){
         ocupacion = 0;
@@ -94,13 +99,17 @@ public class Aeropuerto {
     }
     
     public void llegadaHangar(String id){
+        lHangar.lock();
         hangar.add(id);
         actualizarHangar();
+        lHangar.unlock();
     }
     
     public void salidaHangar(String id){
+        lHangar.lock();
         hangar.remove(id);
         actualizarHangar();
+        lHangar.unlock();
     }
     
     public void actualizarHangar(){
@@ -222,6 +231,28 @@ public class Aeropuerto {
             simulador.usoAeroviaMB(a);
         }else{
             simulador.usoAeroviaBM(a);
+        }
+    }
+
+    public void llegadaRodaje(String id){
+        lRodaje.lock();
+        rodaje.add(id);
+        actualizarRodaje();
+        lRodaje.unlock();
+    }
+    
+    public void salidaRodaje(String id){
+        lRodaje.lock();
+        rodaje.remove(id);
+        actualizarRodaje();
+        lRodaje.unlock();
+    }
+    
+    public void actualizarRodaje(){
+        if(nombre == "Madrid"){
+            simulador.modRodajeM(rodaje);
+        }else{
+            simulador.modRodajeB(rodaje);
         }
     }
 }

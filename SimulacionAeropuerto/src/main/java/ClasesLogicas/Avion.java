@@ -59,6 +59,13 @@ public class Avion implements Runnable{
                 aero.solPistaDespegue(id);
                 aero.volar(this);
                 aero.solPistaAterrizaje(id);
+                aero.llegadaRodaje(id);
+                puerta = aero.solPuertaDesembarque(id);
+                Thread.sleep(3000+(int)(Math.random()*2000));
+                aero.salidaRodaje(id);
+                Thread.sleep(1000+(int)(Math.random()*4000));
+                aero.llegadaPasajeros(ocupacion);
+                ocupacion = 0;
             } catch (InterruptedException ex) {
                 Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
             }
