@@ -32,6 +32,14 @@ public class Avion implements Runnable{
         char letra2 = (char) ('A' + random.nextInt(26));
         this.id = Character.toString(letra1) + Character.toString(letra2)+ "-"+cod;
     }
+    
+    public String getId(){
+        return id;
+    }
+    
+    public void setAeropuerto(Aeropuerto a){
+        this.aero = a;
+    }
     public void run() {
         while(true){
             try {
@@ -49,7 +57,8 @@ public class Avion implements Runnable{
                 aero.liberarPuerta(puerta);
                 Thread.sleep(1000+(int)(Math.random()*4000));
                 aero.solPistaDespegue(id);
-                
+                aero.volar(this);
+                aero.solPistaAterrizaje(id);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
             }
