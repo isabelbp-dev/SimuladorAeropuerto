@@ -4,6 +4,10 @@
  */
 package Interfaz;
 
+import ClasesLogicas.Aeropuerto;
+import ClasesLogicas.Avion;
+import ClasesLogicas.GeneradorAutobus;
+import ClasesLogicas.GeneradorAviones;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
@@ -19,7 +23,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final JTextField[] puertasB;
     private final JTextField[] pistasM;
     private final JTextField[] pistasB;
+    private final Aeropuerto aeroMadrid;
+    private final Aeropuerto aeroBarcelona;
+    private final HashSet<String> aeroviaMB = new HashSet<>();
+    private final HashSet<String> aeroviaBM = new HashSet<>();
 
+    private final Lock lAeroviaMB = new ReentrantLock();
+    private final Lock lAeroviaBM = new ReentrantLock();
     /**
      * Creates new form InterfazSimulador
      */
@@ -31,6 +41,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
         this.pistasM = new JTextField[]{pista1M, pista2M, pista3M, pista4M};
         this.pistasB = new JTextField[]{pista1B, pista2B, pista3B, pista4B};
         this.setLocationRelativeTo(null);
+        Aeropuerto aeroM = new Aeropuerto(this, "Madrid");
+        Aeropuerto aeroB = new Aeropuerto(this, "Barcelona");
+        aeroMadrid = aeroM;
+        aeroBarcelona = aeroB;
+        Thread gAviones = new Thread(new GeneradorAviones(aeroM, aeroB));
+        Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, this));
+        gBuses.start();
+        gAviones.start();
     }
     
     //Modificaciones número de pasajeros
@@ -86,6 +104,62 @@ public class InterfazSimulador extends javax.swing.JFrame {
     public void modPistasB(int pista, String id){
         pistasB[pista].setText(id);
     }
+    
+    //Actualizar aerovías
+    public void modAeroviaMB(){
+        lAeroviaMB.lock();
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: aeroviaMB){
+            joiner.add(avion);
+        }
+        inputAerovMB.setText(joiner.toString());
+        lAeroviaMB.unlock();
+    }
+    public void modAeroviaBM(){
+        lAeroviaBM.lock();
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: aeroviaBM){
+            joiner.add(avion);
+        }
+        inputAerovBM.setText(joiner.toString());
+        lAeroviaBM.unlock();
+    }
+    //Uso de aerovías
+    public void usoAeroviaMB(Avion a) throws InterruptedException{
+        aeroviaMB.add(a.getId());
+        modAeroviaMB();
+        Thread.sleep(15000+(int)(Math.random()*15000));
+        a.setAeropuerto(aeroBarcelona);
+    }
+    public void usoAeroviaBM(Avion a)throws InterruptedException{
+        aeroviaBM.add(a.getId());
+        modAeroviaBM();
+        Thread.sleep(15000+(int)(Math.random()*15000));
+        a.setAeropuerto(aeroMadrid);
+    }
+    public void salirAerovMB(String id){
+        aeroviaMB.remove(id);
+    }
+    public void salirAerovBM(String id){
+        aeroviaBM.remove(id);
+    }
+    
+    //Actualizar rodaje
+    public void modRodajeM(HashSet<String> rodaje){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: rodaje){
+            joiner.add(avion);
+        }
+        inputRodajeM.setText(joiner.toString());
+    }
+    
+    public void modRodajeB(HashSet<String> rodaje){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: rodaje){
+            joiner.add(avion);
+        }
+        inputRodajeB.setText(joiner.toString());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,7 +179,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputPasajerosMadrid = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        inputRodajeM = new javax.swing.JTextField();
         inputHangarM = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
@@ -142,7 +216,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputPasajerosBarcelona = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jTextField21 = new javax.swing.JTextField();
+        inputRodajeB = new javax.swing.JTextField();
         inputHangarB = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         jTextField23 = new javax.swing.JTextField();
@@ -171,8 +245,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        jTextField35 = new javax.swing.JTextField();
-        jTextField36 = new javax.swing.JTextField();
+        inputAerovMB = new javax.swing.JTextField();
+        inputAerovBM = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -199,7 +273,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel5.setText("Hangar: ");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
-        jPanel2.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
+        jPanel2.add(inputRodajeM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
         jPanel2.add(inputHangarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
         jLabel6.setText("Taller: ");
@@ -276,7 +350,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel22.setText("Hangar: ");
         jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
-        jPanel4.add(jTextField21, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
+        jPanel4.add(inputRodajeB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
         jPanel4.add(inputHangarB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
         jLabel23.setText("Taller: ");
@@ -344,8 +418,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -354,11 +428,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel35)
-                    .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36)
-                    .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -408,6 +482,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField inputAerovBM;
+    private javax.swing.JTextField inputAerovMB;
     private javax.swing.JTextField inputBusAeroB;
     private javax.swing.JTextField inputBusAeroM;
     private javax.swing.JTextField inputBusBarcelona;
@@ -416,6 +492,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputHangarM;
     private javax.swing.JTextField inputPasajerosBarcelona;
     private javax.swing.JTextField inputPasajerosMadrid;
+    private javax.swing.JTextField inputRodajeB;
+    private javax.swing.JTextField inputRodajeM;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -458,12 +536,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField35;
-    private javax.swing.JTextField jTextField36;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField pista1B;
