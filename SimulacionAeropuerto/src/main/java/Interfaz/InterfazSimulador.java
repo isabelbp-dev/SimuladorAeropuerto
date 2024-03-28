@@ -115,7 +115,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputAerovMB.setText(joiner.toString());
         lAeroviaMB.unlock();
     }
-    
     public void modAeroviaBM(){
         lAeroviaBM.lock();
         StringJoiner joiner = new StringJoiner(",");
@@ -144,6 +143,23 @@ public class InterfazSimulador extends javax.swing.JFrame {
     public void salirAerovBM(String id){
         aeroviaBM.remove(id);
     }
+    
+    //Actualizar rodaje
+    public void modRodajeM(HashSet<String> rodaje){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: rodaje){
+            joiner.add(avion);
+        }
+        inputRodajeM.setText(joiner.toString());
+    }
+    
+    public void modRodajeB(HashSet<String> rodaje){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: rodaje){
+            joiner.add(avion);
+        }
+        inputRodajeB.setText(joiner.toString());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,7 +179,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputPasajerosMadrid = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        inputRodajeM = new javax.swing.JTextField();
         inputHangarM = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
@@ -200,7 +216,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputPasajerosBarcelona = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jTextField21 = new javax.swing.JTextField();
+        inputRodajeB = new javax.swing.JTextField();
         inputHangarB = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
         jTextField23 = new javax.swing.JTextField();
@@ -257,7 +273,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel5.setText("Hangar: ");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
-        jPanel2.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
+        jPanel2.add(inputRodajeM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
         jPanel2.add(inputHangarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
         jLabel6.setText("Taller: ");
@@ -334,7 +350,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel22.setText("Hangar: ");
         jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
-        jPanel4.add(jTextField21, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
+        jPanel4.add(inputRodajeB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 270, -1));
         jPanel4.add(inputHangarB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
         jLabel23.setText("Taller: ");
@@ -476,6 +492,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputHangarM;
     private javax.swing.JTextField inputPasajerosBarcelona;
     private javax.swing.JTextField inputPasajerosMadrid;
+    private javax.swing.JTextField inputRodajeB;
+    private javax.swing.JTextField inputRodajeM;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -518,10 +536,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField pista1B;
