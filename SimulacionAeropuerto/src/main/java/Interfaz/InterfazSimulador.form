@@ -729,8 +729,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextField35" min="-2" pref="700" max="-2" attributes="0"/>
-                          <Component id="jTextField36" min="-2" pref="700" max="-2" attributes="0"/>
+                          <Component id="inputAerovMB" min="-2" pref="700" max="-2" attributes="0"/>
+                          <Component id="inputAerovBM" min="-2" pref="700" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="37" max="32767" attributes="0"/>
                   </Group>
@@ -742,12 +742,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel35" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField35" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputAerovMB" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel36" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField36" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="inputAerovBM" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="50" max="32767" attributes="0"/>
                   </Group>
@@ -765,9 +765,9 @@
                 <Property name="text" type="java.lang.String" value="Barcelona - Madrid: "/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField35">
+            <Component class="javax.swing.JTextField" name="inputAerovMB">
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField36">
+            <Component class="javax.swing.JTextField" name="inputAerovBM">
             </Component>
           </SubComponents>
         </Container>

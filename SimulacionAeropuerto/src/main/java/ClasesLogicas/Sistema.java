@@ -19,11 +19,5 @@ public class Sistema {
     public static void main(String[] x){
         InterfazSimulador simulador = new InterfazSimulador();
         simulador.setVisible(true);
-        Aeropuerto aeroM = new Aeropuerto(simulador, "Madrid");
-        Aeropuerto aeroB = new Aeropuerto(simulador, "Barcelona");
-        Thread gAviones = new Thread(new GeneradorAviones(aeroM, aeroB));
-        Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, simulador));
-        gBuses.start();
-        gAviones.start();
     }
 }

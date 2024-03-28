@@ -185,6 +185,11 @@ public class Aeropuerto {
         }
         int pista = pistas.indexOf(null);
         ocuparPista(pista, id);
+        if(nombre == "Madrid"){
+            simulador.salirAerovBM(id);
+        }else{
+            simulador.salirAerovMB(id);
+        }
         Thread.sleep(1000+(int)(Math.random()*4000));
         liberarPista(pista);
         semPistas.release();
@@ -209,6 +214,14 @@ public class Aeropuerto {
             simulador.modPistasM(pista, id);
         }else{
             simulador.modPistasB(pista, id);
+        }
+    }
+    
+    public void volar(Avion a) throws InterruptedException{
+        if(nombre == "Madrid"){
+            simulador.usoAeroviaMB(a);
+        }else{
+            simulador.usoAeroviaBM(a);
         }
     }
 }
