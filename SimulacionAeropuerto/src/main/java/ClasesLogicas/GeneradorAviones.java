@@ -1,26 +1,24 @@
 package ClasesLogicas;
-
-
 import ClasesLogicas.Avion;
 import ClasesLogicas.Aeropuerto;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 /**
  *
  * @author isaba
  */
+
 public class GeneradorAviones implements Runnable{
+    //Atributos
     private Aeropuerto aero1;
     private Aeropuerto aero2;
+    
+    //Constructor
     public GeneradorAviones(Aeropuerto aeropuerto1, Aeropuerto aeropuerto2){
         this.aero1 = aeropuerto1;
         this.aero2= aeropuerto2;
     }
     
+    //Ciclo de vida del generador
     public void run() {
         for(int i = 0; i < 8000; i++){
             try{
