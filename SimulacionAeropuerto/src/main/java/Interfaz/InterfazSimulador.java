@@ -131,22 +131,24 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Uso de aerovías
     public void usoAeroviaMB(Avion a) throws InterruptedException{
-        aeroviaMB.add(a.getId());
+        aeroviaMB.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroBarcelona);
     }
     public void usoAeroviaBM(Avion a)throws InterruptedException{
-        aeroviaBM.add(a.getId());
+        aeroviaBM.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroMadrid);
     }
-    public void salirAerovMB(String id){
-        aeroviaMB.remove(id);
+    public void salirAerovMB(Avion a){
+        aeroviaMB.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
+        modAeroviaMB();
     }
-    public void salirAerovBM(String id){
-        aeroviaBM.remove(id);
+    public void salirAerovBM(Avion a){
+        aeroviaBM.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
+        modAeroviaBM();
     }
     
     //Actualizar rodaje
@@ -184,7 +186,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     //Actualizar talleres
     public void modTallerM(HashSet<String> taller){
         StringJoiner joiner = new StringJoiner(",");
-        System.out.println("Llega");
         for(String avion: taller){
             joiner.add(avion);
         }

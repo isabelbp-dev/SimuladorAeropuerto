@@ -34,6 +34,12 @@ public class Avion implements Runnable{
     public String getId(){
         return id;
     }
+    public int getOcupacion(){
+        return ocupacion;
+    }
+    public int getCapacidad(){
+        return capacidad;
+    }
     public void setAeropuerto(Aeropuerto a){
         this.aero = a;
     }
@@ -43,12 +49,13 @@ public class Avion implements Runnable{
         aero.llegadaEstacionamiento(id);//Llegamos estacionamiento
         int puerta = aero.solPuertaEmbarque(id);//Solicitamos puerta embarque
         aero.salidaEstacionamiento(id);//salimos estacionamiento, vamos a puerta
-        int ocupacion = aero.salidaPasajeros(capacidad);//Esperamos a que se suban los pasajeros
+        this.ocupacion = aero.salidaPasajeros(capacidad);//Esperamos a que se suban los pasajeros
         Thread.sleep(1000+(int)(Math.random()*2000));
         int i = 0;
+        System.out.println(ocupacion);
         while((i <2) && (ocupacion < capacidad)){
             Thread.sleep(1000+(int)(Math.random()*4000));
-            ocupacion += aero.salidaPasajeros(capacidad - ocupacion);
+            this.ocupacion += aero.salidaPasajeros(capacidad - ocupacion);
             Thread.sleep(1000+(int)(Math.random()*2000));
         }
         aero.liberarPuerta(puerta);//Salimos de la puerta de embarque
@@ -58,14 +65,14 @@ public class Avion implements Runnable{
     }
     //Llegada del avion
     public void llegadaAvion() throws InterruptedException{
-        aero.solPistaAterrizaje(id);//Solicitan pista de aterrizaje
+        aero.solPistaAterrizaje(this);//Solicitan pista de aterrizaje
         aero.llegadaRodaje(id);//Después de aterrizar, van al área de rodaje y esperan a una puerta de desembarque
         int puerta = aero.solPuertaDesembarque(id);//van a la puerta de desembarque
         Thread.sleep(3000+(int)(Math.random()*2000));//tiempo que tardan en ir a la puerta
         aero.salidaRodaje(id);//salen del área de rodaje
         Thread.sleep(1000+(int)(Math.random()*4000));//bajan a los pasajeros del avion
         aero.llegadaPasajeros(ocupacion);//llegan pasajeros a aeropuerto
-        ocupacion = 0;//se vacia avion 
+        this.ocupacion = 0;//se vacia avion 
         aero.liberarPuerta(puerta);//salimos de la puerta de desembarque
         aero.llegadaEstacionamiento(id);//llegamos a la zona de estacionamiento
         Thread.sleep(1000+(int)(Math.random()*4000));//realizamos comprobaciones 
