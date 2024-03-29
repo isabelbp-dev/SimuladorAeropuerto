@@ -1,5 +1,6 @@
 package ClasesLogicas;
 import ClasesLogicas.Aeropuerto;
+import Renders.CircularProgressBar;
 import static java.lang.Math.*;
 import java.util.Random; 
 import java.util.logging.Level;
@@ -47,18 +48,24 @@ public class Avion implements Runnable{
     //Salida del avion
     public void salidaAvion() throws InterruptedException{
         aero.llegadaEstacionamiento(id);//Llegamos estacionamiento
-        int puerta = aero.solPuertaEmbarque(id);//Solicitamos puerta embarque
+        Object[] resultado = aero.solPuertaEmbarque(id);//Solicitamos puerta embarque
+        int puerta = (int) resultado[0];
+        CircularProgressBar c = (CircularProgressBar) resultado[1];
+        c.setProgress(Math.max(((ocupacion/capacidad)*100),5));
         aero.salidaEstacionamiento(id);//salimos estacionamiento, vamos a puerta
         this.ocupacion = aero.salidaPasajeros(capacidad);//Esperamos a que se suban los pasajeros
+        c.setProgress(Math.max(((ocupacion/capacidad)*100),5));
         Thread.sleep(1000+(int)(Math.random()*2000));
         int i = 0;
-        System.out.println(ocupacion);
         while((i <2) && (ocupacion < capacidad)){
             Thread.sleep(1000+(int)(Math.random()*4000));
             this.ocupacion += aero.salidaPasajeros(capacidad - ocupacion);
+            c.setProgress(Math.max((int)(ocupacion * 100.0) / capacidad, 5));
             Thread.sleep(1000+(int)(Math.random()*2000));
+            i++;
         }
         aero.liberarPuerta(puerta);//Salimos de la puerta de embarque
+        c.setProgress(0);
         aero.llegadaRodaje(id);//Llegamos a rodaje hasta tener pista
         Thread.sleep(1000+(int)(Math.random()*4000));//Realizamos comprobaciones
         aero.solPistaDespegue(id);

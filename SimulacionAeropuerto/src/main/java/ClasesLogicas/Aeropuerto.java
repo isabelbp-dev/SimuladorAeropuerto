@@ -1,5 +1,6 @@
 package ClasesLogicas;
 import Interfaz.InterfazSimulador;
+import Renders.CircularProgressBar;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
@@ -120,9 +121,10 @@ public class Aeropuerto {
     }
     
     //Solicitudes, asignaciones y salidas de las puertas de embarque
-    public int solPuertaEmbarque(String id){
+    public Object[] solPuertaEmbarque(String id){
         puertas.lock();
         int n = 0;
+        CircularProgressBar c = new CircularProgressBar(); 
         try{
             n = puertasEmbarque.subList(0, 5).indexOf(null);
             while(n<0){
@@ -130,12 +132,13 @@ public class Aeropuerto {
                 n = puertasEmbarque.subList(0, 5).indexOf(null);
             }
             puertasEmbarque.set(n, id);
-            actualizarPuertas(n, " 🛫 - "+id);
+            c = actualizarPuertas(n, " 🛫 - "+id);
+            
         }catch(InterruptedException e){
             Thread.currentThread().interrupt();
         }finally{
             puertas.unlock();}
-        return n;
+        return new Object[]{n, c};
     }
     public int solPuertaDesembarque(String id){
         puertas.lock();
@@ -166,12 +169,14 @@ public class Aeropuerto {
         actualizarPuertas(n, "");
         puertas.unlock();
     }
-    public void actualizarPuertas(int puerta, String id){
+    public CircularProgressBar actualizarPuertas(int puerta, String id){
+        CircularProgressBar c;
         if(nombre == "Madrid"){
-            simulador.modPuertasM(puerta, id);
+            c = simulador.modPuertasM(puerta, id);
         }else{
-            simulador.modPuertasB(puerta, id);
+            c = simulador.modPuertasB(puerta, id);
         }
+        return c; 
     }
     
     //Operaciones relacionadas con las pistas de despegue y aterrizaje
