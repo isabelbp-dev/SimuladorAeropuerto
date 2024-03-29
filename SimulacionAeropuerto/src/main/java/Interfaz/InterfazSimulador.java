@@ -181,6 +181,22 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputEstacionamientoB.setText(joiner.toString());
     }
  
+    //Actualizar talleres
+    public void modTallerM(HashSet<String> taller){
+        StringJoiner joiner = new StringJoiner(",");
+        System.out.println("Llega");
+        for(String avion: taller){
+            joiner.add(avion);
+        }
+        inputTallerM.setText(joiner.toString());
+    }
+    public void modTallerB(HashSet<String> taller){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String avion: taller){
+            joiner.add(avion);
+        }
+        inputTallerB.setText(joiner.toString());
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -198,7 +214,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputRodajeM = new javax.swing.JTextField();
         inputHangarM = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        inputTallerM = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         inputEstacionamientoM = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -235,7 +251,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputRodajeB = new javax.swing.JTextField();
         inputHangarB = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
-        jTextField23 = new javax.swing.JTextField();
+        inputTallerB = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         inputEstacionamientoB = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
@@ -294,7 +310,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel6.setText("Taller: ");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
-        jPanel2.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
+        jPanel2.add(inputTallerM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
 
         jLabel7.setText("Estacionamiento:");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
@@ -371,7 +387,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jLabel23.setText("Taller: ");
         jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
-        jPanel4.add(jTextField23, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
+        jPanel4.add(inputTallerB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
 
         jLabel24.setText("Estacionamiento:");
         jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
@@ -512,6 +528,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputPasajerosMadrid;
     private javax.swing.JTextField inputRodajeB;
     private javax.swing.JTextField inputRodajeM;
+    private javax.swing.JTextField inputTallerB;
+    private javax.swing.JTextField inputTallerM;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -554,8 +572,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField23;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField pista1B;
     private javax.swing.JTextField pista1M;
     private javax.swing.JTextField pista2B;
