@@ -22,6 +22,7 @@ public class Aeropuerto {
     HashSet<String> hangar = new HashSet<>();
     HashSet<String> rodaje = new HashSet<>();
     HashSet<String> estacionamiento = new HashSet<>();
+    HashSet<String> taller = new HashSet<>();
     
     //Atributos para la comunicación y sincronización de...
     //de buses
@@ -37,10 +38,12 @@ public class Aeropuerto {
     private final Semaphore semPistas = new Semaphore(4, true);
     private final Lock lPistas = new ReentrantLock();
     
-    //de hangar, rodaje y estacionamiento
+    //de hangar, rodaje, estacionamiento y taller
     private final Lock lHangar = new ReentrantLock();
     private final Lock lRodaje = new ReentrantLock();
     private final Lock lEstacionamiento = new ReentrantLock();
+    private final Lock puertaTaller = new ReentrantLock(true);
+    private final Semaphore semTaller = new Semaphore(20, true);
     
     //Constructor
     public Aeropuerto(InterfazSimulador s, String n){
@@ -144,7 +147,6 @@ public class Aeropuerto {
                 n = puertasEmbarque.subList(1, 6).lastIndexOf(null);
             }
             n+=1;
-            System.out.println(n);
             puertasEmbarque.set(n, id);
             actualizarPuertas(n, id);
         }catch(InterruptedException e){
@@ -268,6 +270,45 @@ public class Aeropuerto {
             simulador.modEstacionamientoM(estacionamiento);
         }else{
             simulador.modEstacionamientoB(estacionamiento);
+        }
+    }
+
+    //Gestión de las revisiones del taller
+    public void revisionRapida(String id) throws InterruptedException{
+        semTaller.acquire();
+        puertaTaller.lock();
+        Thread.sleep(1000);
+        taller.add(id);
+        actualizarTaller();
+        puertaTaller.unlock();
+        Thread.sleep(1000+(int)(Math.random()*4000));
+        puertaTaller.lock();
+        Thread.sleep(1000);
+        taller.remove(id);
+        actualizarTaller();
+        puertaTaller.unlock();
+        semTaller.release();
+    }
+    public void revisionProfunda(String id) throws InterruptedException{
+        semTaller.acquire();
+        puertaTaller.lock();
+        Thread.sleep(1000);
+        taller.add(id);
+        actualizarTaller();
+        puertaTaller.unlock();
+        Thread.sleep(5000+(int)(Math.random()*5000));
+        puertaTaller.lock();
+        Thread.sleep(1000);
+        taller.remove(id);
+        actualizarTaller();
+        puertaTaller.unlock();
+        semTaller.release();
+    }
+    public void actualizarTaller(){
+        if(nombre == "Madrid"){
+            simulador.modTallerM(taller);
+        }else{
+            simulador.modTallerB(taller);
         }
     }
 }

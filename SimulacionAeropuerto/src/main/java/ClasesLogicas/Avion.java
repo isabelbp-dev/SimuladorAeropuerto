@@ -17,6 +17,7 @@ public class Avion implements Runnable{
     private int capacidad;
     private int ocupacion;
     private Aeropuerto aero;
+    private int numVuelos;
     
     //Constructor
     public Avion(String cod, Aeropuerto aeropuerto){
@@ -26,6 +27,7 @@ public class Avion implements Runnable{
         char letra1 = (char) ('A' + random.nextInt(26));
         char letra2 = (char) ('A' + random.nextInt(26));
         this.id = Character.toString(letra1) + Character.toString(letra2)+ "-"+cod;
+        this.numVuelos = 0;
     }
     
     //Métodos getter y setter
@@ -56,16 +58,17 @@ public class Avion implements Runnable{
     }
     //Llegada del avion
     public void llegadaAvion() throws InterruptedException{
-        aero.solPistaAterrizaje(id);
-        aero.llegadaRodaje(id);
-        int puerta = aero.solPuertaDesembarque(id);
-        Thread.sleep(3000+(int)(Math.random()*2000));
-        aero.salidaRodaje(id);
-        Thread.sleep(1000+(int)(Math.random()*4000));
-        aero.llegadaPasajeros(ocupacion);
-        ocupacion = 0;
-        aero.liberarPuerta(puerta);
-        aero.llegadaEstacionamiento(id);
+        aero.solPistaAterrizaje(id);//Solicitan pista de aterrizaje
+        aero.llegadaRodaje(id);//Después de aterrizar, van al área de rodaje y esperan a una puerta de desembarque
+        int puerta = aero.solPuertaDesembarque(id);//van a la puerta de desembarque
+        Thread.sleep(3000+(int)(Math.random()*2000));//tiempo que tardan en ir a la puerta
+        aero.salidaRodaje(id);//salen del área de rodaje
+        Thread.sleep(1000+(int)(Math.random()*4000));//bajan a los pasajeros del avion
+        aero.llegadaPasajeros(ocupacion);//llegan pasajeros a aeropuerto
+        ocupacion = 0;//se vacia avion 
+        aero.liberarPuerta(puerta);//salimos de la puerta de desembarque
+        aero.llegadaEstacionamiento(id);//llegamos a la zona de estacionamiento
+        Thread.sleep(1000+(int)(Math.random()*4000));//realizamos comprobaciones 
     }
     //Ciclo de vida del avión
     public void run() {
@@ -73,17 +76,20 @@ public class Avion implements Runnable{
             try {
                 salidaAvion();
                 aero.volar(this);
+                numVuelos += 1;
                 llegadaAvion();
-//                aero.solPistaAterrizaje(id);
-//                aero.llegadaRodaje(id);
-//                int puerta = aero.solPuertaDesembarque(id);
-//                Thread.sleep(3000+(int)(Math.random()*2000));
-//                aero.salidaRodaje(id);
-//                Thread.sleep(1000+(int)(Math.random()*4000));
-//                aero.llegadaPasajeros(ocupacion);
-//                ocupacion = 0;
-//                aero.liberarPuerta(puerta);
-//                aero.llegadaEstacionamiento(id);
+                if(numVuelos == 15){
+                    aero.revisionProfunda(id);
+                    numVuelos = 0;
+                }else{
+                    aero.revisionRapida(id);
+                }
+                boolean irHangar = random.nextBoolean();
+                if(irHangar){
+                    aero.llegadaHangar(id);
+                    Thread.sleep(15000+(int)(Math.random()*15000));
+                    aero.salidaHangar(id);
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(Avion.class.getName()).log(Level.SEVERE, null, ex);
             }
