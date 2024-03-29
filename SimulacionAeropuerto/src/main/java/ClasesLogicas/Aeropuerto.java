@@ -75,7 +75,7 @@ public class Aeropuerto {
             num = ocupacion;
             ocupacion = 0;
         }
-        actualizarNumPasajeros(num);
+        actualizarNumPasajeros(ocupacion);
         return num;}
     
     //Llegada y salida de buses
@@ -130,7 +130,7 @@ public class Aeropuerto {
                 n = puertasEmbarque.subList(0, 5).indexOf(null);
             }
             puertasEmbarque.set(n, id);
-            actualizarPuertas(n, id);
+            actualizarPuertas(n, " 🛫 - "+id);
         }catch(InterruptedException e){
             Thread.currentThread().interrupt();
         }finally{
@@ -148,7 +148,7 @@ public class Aeropuerto {
             }
             n+=1;
             puertasEmbarque.set(n, id);
-            actualizarPuertas(n, id);
+            actualizarPuertas(n, " 🛬 - "+id);
         }catch(InterruptedException e){
             Thread.currentThread().interrupt();
         }finally{
@@ -184,7 +184,7 @@ public class Aeropuerto {
         liberarPista(pista);
         semPistas.release();
     }
-    public void solPistaAterrizaje(String id) throws InterruptedException{
+    public void solPistaAterrizaje(Avion a) throws InterruptedException{
         boolean encontrada;
         encontrada = semPistas.tryAcquire();
         while(!encontrada){
@@ -192,11 +192,11 @@ public class Aeropuerto {
             encontrada = semPistas.tryAcquire();
         }
         int pista = pistas.indexOf(null);
-        ocuparPista(pista, id);
+        ocuparPista(pista, a.getId());
         if(nombre == "Madrid"){
-            simulador.salirAerovBM(id);
+            simulador.salirAerovBM(a);
         }else{
-            simulador.salirAerovMB(id);
+            simulador.salirAerovMB(a);
         }
         Thread.sleep(1000+(int)(Math.random()*4000));
         liberarPista(pista);
