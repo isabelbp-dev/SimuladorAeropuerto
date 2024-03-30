@@ -3,6 +3,7 @@ import ClasesLogicas.Aeropuerto;
 import ClasesLogicas.Avion;
 import ClasesLogicas.GeneradorAutobus;
 import ClasesLogicas.GeneradorAviones;
+import ClasesLogicas.RegistroLog;
 import Renders.CircularProgressBar;
 import java.awt.Dimension;
 import java.util.concurrent.locks.Lock;
@@ -18,6 +19,8 @@ import javax.swing.JTextField;
  */
 
 public class InterfazSimulador extends javax.swing.JFrame {
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private final Lock modBus1 = new ReentrantLock();
     private final JTextField[] puertasM;
@@ -163,12 +166,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
     public void usoAeroviaMB(Avion a) throws InterruptedException{
         aeroviaMB.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
+        logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Madrid-Barcelona. ");
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroBarcelona);
     }
     public void usoAeroviaBM(Avion a)throws InterruptedException{
         aeroviaBM.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
+        logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Barcelona-Madrid. ");
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroMadrid);
     }
@@ -327,6 +332,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AEROPUERTO MADRID", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        ocupacionP3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP3.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP3.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 20, 20));
@@ -401,18 +407,22 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel2.add(pista2M, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
         jPanel2.add(pista4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
+        ocupacionP1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP1.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP1.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 20, 20));
 
+        ocupacionP2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP2.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP2.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 20, 20));
 
+        ocupacionP4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP4.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP4.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));
 
+        ocupacionP5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP5.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP5.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 20, 20));
@@ -529,22 +539,27 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel4.add(pista2B, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
         jPanel4.add(pista4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
+        ocupacionP9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP9.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP9.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 20, 20));
 
+        ocupacionP7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP7.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP7.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 20, 20));
 
+        ocupacionP8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP8.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP8.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 20, 20));
 
+        ocupacionP11.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP11.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP11.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP11, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 20, 20));
 
+        ocupacionP10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ocupacionP10.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP10.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP10, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));

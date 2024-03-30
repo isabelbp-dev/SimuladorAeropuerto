@@ -8,6 +8,8 @@ import ClasesLogicas.Aeropuerto;
  */
 
 public class GeneradorAviones implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private Aeropuerto aero1;
     private Aeropuerto aero2;
@@ -29,6 +31,7 @@ public class GeneradorAviones implements Runnable{
                     Thread avion = new Thread(new Avion(String.format("%04d", i), aero2));
                     avion.start();
                 }
+                logger.registrarEvento("Avion " + String.format("%04d", i) + " es creado. ");
                 Thread.sleep(1000+(int)(Math.random()*2000));
             }catch(InterruptedException e){
                 e.printStackTrace();

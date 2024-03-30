@@ -13,7 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class Aeropuerto {
-
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private String nombre;
     private int ocupacion;
@@ -180,11 +181,12 @@ public class Aeropuerto {
     }
     
     //Operaciones relacionadas con las pistas de despegue y aterrizaje
-    public void solPistaDespegue(String id) throws InterruptedException{
+    public void solPistaDespegue(String id, int pasajeros) throws InterruptedException{
         semPistas.acquire();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, id);
         salidaRodaje(id);
+        logger.registrarEvento("Avión " + id + " (" + pasajeros + " pasajeros) accede a pista " + pista + " para despegue. ");
         Thread.sleep(1000+(int)(Math.random()*2000));
         liberarPista(pista);
         semPistas.release();
@@ -198,6 +200,7 @@ public class Aeropuerto {
         }
         int pista = pistas.indexOf(null);
         ocuparPista(pista, a.getId());
+        logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a pista " + pista + " para aterrizar. ");
         if(nombre == "Madrid"){
             simulador.salirAerovBM(a);
         }else{
@@ -285,6 +288,7 @@ public class Aeropuerto {
         Thread.sleep(1000);
         taller.add(id);
         actualizarTaller();
+        logger.registrarEvento("Avión " + id + " accede al taller para una revisión rápida. ");
         puertaTaller.unlock();
         Thread.sleep(1000+(int)(Math.random()*4000));
         puertaTaller.lock();
@@ -300,6 +304,7 @@ public class Aeropuerto {
         Thread.sleep(1000);
         taller.add(id);
         actualizarTaller();
+        logger.registrarEvento("Avión " + id + " accede al taller para una revisión profunda. ");
         puertaTaller.unlock();
         Thread.sleep(5000+(int)(Math.random()*5000));
         puertaTaller.lock();

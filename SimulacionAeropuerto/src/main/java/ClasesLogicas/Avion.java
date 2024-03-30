@@ -12,6 +12,8 @@ import java.util.logging.Logger;
  */
 
 public class Avion implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     Random random = new Random();
     private String id;
@@ -48,8 +50,10 @@ public class Avion implements Runnable{
     //Salida del avion
     public void salidaAvion() throws InterruptedException{
         aero.llegadaEstacionamiento(id);//Llegamos estacionamiento
+        logger.registrarEvento("Avion " + id + " ha llegado al area de estacionamiento. ");
         Object[] resultado = aero.solPuertaEmbarque(id);//Solicitamos puerta embarque
         int puerta = (int) resultado[0];
+        logger.registrarEvento("Avion " + id + " accede a la puerta de embarque " + (puerta+1) + " para esperar pasajeros. ");
         CircularProgressBar c = (CircularProgressBar) resultado[1];
         c.setProgress(Math.max(((ocupacion/capacidad)*100),5));
         aero.salidaEstacionamiento(id);//salimos estacionamiento, vamos a puerta
@@ -67,21 +71,25 @@ public class Avion implements Runnable{
         aero.liberarPuerta(puerta);//Salimos de la puerta de embarque
         c.setProgress(0);
         aero.llegadaRodaje(id);//Llegamos a rodaje hasta tener pista
+        logger.registrarEvento("Avion " + id +" (" + ocupacion +"/" + capacidad + " pasajeros) accede al área de rodaje en espera de una pista de despegue. ");
         Thread.sleep(1000+(int)(Math.random()*4000));//Realizamos comprobaciones
-        aero.solPistaDespegue(id);
+        aero.solPistaDespegue(id, ocupacion);
     }
     //Llegada del avion
     public void llegadaAvion() throws InterruptedException{
         aero.solPistaAterrizaje(this);//Solicitan pista de aterrizaje
         aero.llegadaRodaje(id);//Después de aterrizar, van al área de rodaje y esperan a una puerta de desembarque
+        logger.registrarEvento("Avion " + id + " llega al área de rodaje en espera de una puerta para desembarcar. ");
         int puerta = aero.solPuertaDesembarque(id);//van a la puerta de desembarque
         Thread.sleep(3000+(int)(Math.random()*2000));//tiempo que tardan en ir a la puerta
         aero.salidaRodaje(id);//salen del área de rodaje
+        logger.registrarEvento("Avión " + id + " accede a puerta de embarque " + puerta + " para desembarcar a " + ocupacion + " pasajeros. ");
         Thread.sleep(1000+(int)(Math.random()*4000));//bajan a los pasajeros del avion
         aero.llegadaPasajeros(ocupacion);//llegan pasajeros a aeropuerto
         this.ocupacion = 0;//se vacia avion 
         aero.liberarPuerta(puerta);//salimos de la puerta de desembarque
         aero.llegadaEstacionamiento(id);//llegamos a la zona de estacionamiento
+        logger.registrarEvento("Avión " + id + " llega al área de estacionamiento tras desembarcar a los pasajeros. ");
         Thread.sleep(1000+(int)(Math.random()*4000));//realizamos comprobaciones 
     }
     //Ciclo de vida del avión
@@ -101,6 +109,7 @@ public class Avion implements Runnable{
                 boolean irHangar = random.nextBoolean();
                 if(irHangar){
                     aero.llegadaHangar(id);
+                    logger.registrarEvento("Avión " + id + " llega al hangar para reposar. ");
                     Thread.sleep(15000+(int)(Math.random()*15000));
                     aero.salidaHangar(id);
                 }

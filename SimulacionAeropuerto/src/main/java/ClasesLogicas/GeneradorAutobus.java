@@ -9,6 +9,8 @@ import Interfaz.InterfazSimulador;
  */
 
 public class GeneradorAutobus implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private Aeropuerto aeropuerto1;
     private Aeropuerto aeropuerto2;
@@ -32,6 +34,7 @@ public class GeneradorAutobus implements Runnable{
                     Thread bus = new Thread(new Autobus(String.format("%04d", i), aeropuerto2, simulador));
                     bus.start();
                 }
+                logger.registrarEvento("Bus " + String.format("%04d", i) + " es creado. ");
                 Thread.sleep(500+(int)(Math.random()*500));
             }catch(InterruptedException e){
                 e.printStackTrace();
