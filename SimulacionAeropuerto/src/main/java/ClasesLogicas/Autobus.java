@@ -9,6 +9,7 @@ import java.util.Random;
  */
 
 public class Autobus implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
     Random random = new Random();
     //Atributos 
     private String id;
@@ -31,12 +32,16 @@ public class Autobus implements Runnable{
                 aero.salidaBus(id);
                 Thread.sleep(2000+(int)(Math.random()*3000));
                 ocupacion = random.nextInt(51);
+                logger.registrarEvento("Bus " + id + " ha salido de " + aero.getNombre() + " ciudad con "+ ocupacion + " pasajeros. ");
                 Thread.sleep(5000+(int)(Math.random()*5000));
                 aero.llegadaPasajeros(ocupacion);
                 aero.llegadaBus(id);
+                logger.registrarEvento("Bus " + id + " ha dejado " + ocupacion + " pasajeros en el aeropuerto de " + aero.getNombre() + ". ");
                 Thread.sleep(2000+(int)(Math.random()*3000));
                 ocupacion = aero.salidaPasajeros(random.nextInt(51));
+                logger.registrarEvento("Bus " + id + " ha salido del aeropuerto de " + aero.getNombre() + " con " + ocupacion + " pasajeros. ");
                 Thread.sleep(5000+(int)(Math.random()*5000));
+                logger.registrarEvento("Bus " + id + " ha llegado a la ciudad de " + aero.getNombre() + " y ha dejado a " + ocupacion + " pasajeros. ");
             }catch(InterruptedException e){
                 break;
             }
