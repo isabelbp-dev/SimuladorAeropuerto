@@ -2,6 +2,7 @@ package ClasesLogicas;
 import ClasesLogicas.Autobus;
 import ClasesLogicas.Aeropuerto;
 import Interfaz.InterfazSimulador;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -14,7 +15,8 @@ public class GeneradorAutobus implements Runnable{
     //Atributos
     private Aeropuerto aeropuerto1;
     private Aeropuerto aeropuerto2;
-    private InterfazSimulador simulador; 
+    private InterfazSimulador simulador;
+
     
     //Constructor
     public GeneradorAutobus(Aeropuerto aero1, Aeropuerto aero2, InterfazSimulador s){
@@ -34,7 +36,6 @@ public class GeneradorAutobus implements Runnable{
                     Thread bus = new Thread(new Autobus(String.format("%04d", i), aeropuerto2, simulador));
                     bus.start();
                 }
-                logger.registrarEvento("Bus " + String.format("%04d", i) + " es creado. ");
                 Thread.sleep(500+(int)(Math.random()*500));
             }catch(InterruptedException e){
                 e.printStackTrace();

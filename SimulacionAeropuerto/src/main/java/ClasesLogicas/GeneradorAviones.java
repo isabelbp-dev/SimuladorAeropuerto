@@ -1,6 +1,7 @@
 package ClasesLogicas;
 import ClasesLogicas.Avion;
 import ClasesLogicas.Aeropuerto;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -31,7 +32,6 @@ public class GeneradorAviones implements Runnable{
                     Thread avion = new Thread(new Avion(String.format("%04d", i), aero2));
                     avion.start();
                 }
-                logger.registrarEvento("Avion " + String.format("%04d", i) + " es creado. ");
                 Thread.sleep(1000+(int)(Math.random()*2000));
             }catch(InterruptedException e){
                 e.printStackTrace();
