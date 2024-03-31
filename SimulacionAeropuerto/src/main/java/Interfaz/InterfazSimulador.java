@@ -20,7 +20,9 @@ import javax.swing.JTextField;
  */
 
 public class InterfazSimulador extends javax.swing.JFrame {
-    RegistroLog logger = RegistroLog.getInstance();
+    private final RegistroLog logger = RegistroLog.getInstance();
+    private int maxPasajerosM = 0;
+    private int maxPasajerosB = 0; 
     
     //Atributos
     private final Lock modBus1 = new ReentrantLock();
@@ -45,6 +47,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     //Constructor
     public InterfazSimulador() {
         initComponents();
+        bEstadisticas.setVisible(false);
         CircularProgressBar p1 = new CircularProgressBar();
         CircularProgressBar p2 = new CircularProgressBar();
         CircularProgressBar p3 = new CircularProgressBar();
@@ -94,10 +97,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     public void modPasajerosM(int n) throws InterruptedException{
         pausar();
         inputPasajerosMadrid.setText(String.valueOf(n));
+        if(n>maxPasajerosM){
+            maxPasajerosM = n;
+        }
     }
     public void modPasajerosB(int n) throws InterruptedException{
         pausar();
         inputPasajerosBarcelona.setText(String.valueOf(n));
+        if(n>maxPasajerosB){
+            maxPasajerosB = n;
+        }
     }
     
     //Modificaciones de llegadas y salidas de buses
@@ -349,7 +358,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP8 = new javax.swing.JPanel();
         ocupacionP11 = new javax.swing.JPanel();
         ocupacionP10 = new javax.swing.JPanel();
-        inputPausar = new javax.swing.JToggleButton();
+        bPausar = new javax.swing.JToggleButton();
+        bEstadisticas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -471,7 +481,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -585,10 +595,17 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP10.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP10, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));
 
-        inputPausar.setText("Pausar");
-        inputPausar.addActionListener(new java.awt.event.ActionListener() {
+        bPausar.setText("Pausar");
+        bPausar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputPausarActionPerformed(evt);
+                bPausarActionPerformed(evt);
+            }
+        });
+
+        bEstadisticas.setText("👁️  Ver estadísticas");
+        bEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEstadisticasActionPerformed(evt);
             }
         });
 
@@ -597,33 +614,36 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(bEstadisticas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(380, 380, 380))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(4, 4, 4)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(inputPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(380, 380, 380))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(inputPausar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bPausar)
+                    .addComponent(bEstadisticas))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 920, 700));
@@ -631,18 +651,33 @@ public class InterfazSimulador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPausarActionPerformed
-        if(inputPausar.isSelected()){
-            inputPausar.setText("Reanudar");
+    private void bPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPausarActionPerformed
+        if(bPausar.isSelected()){
+            bPausar.setText("Reanudar");
             pausado = true;
+            bEstadisticas.setVisible(pausado);
         }else{
-            inputPausar.setText("Pausar");
+            bPausar.setText("Pausar");
             pausado = false; 
+            bEstadisticas.setVisible(pausado);
             lPausar.lock();
             simuladorPausado.signalAll();
             lPausar.unlock();
         }
-    }//GEN-LAST:event_inputPausarActionPerformed
+    }//GEN-LAST:event_bPausarActionPerformed
+
+    public LinkedHashMap datosOcupacion(){
+        LinkedHashMap<String, Integer> datos = new LinkedHashMap<>();
+        datos.put("Actual Madrid", Integer.parseInt(inputPasajerosMadrid.getText()));
+        datos.put("Máx. Madrid",maxPasajerosM);
+        datos.put("Actual Barcelona", Integer.parseInt(inputPasajerosBarcelona.getText()));
+        datos.put("Máx. Barcelona",maxPasajerosB);
+        return datos;
+    }
+    private void bEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEstadisticasActionPerformed
+        EstadisticasActuales estadisticas = new EstadisticasActuales(datosOcupacion());
+        estadisticas.setVisible(true);
+    }//GEN-LAST:event_bEstadisticasActionPerformed
     public void pausar() throws InterruptedException{
         lPausar.lock();
         try{
@@ -657,6 +692,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bEstadisticas;
+    private javax.swing.JToggleButton bPausar;
     private javax.swing.JTextField inputAerovBM;
     private javax.swing.JTextField inputAerovMB;
     private javax.swing.JTextField inputBusAeroB;
@@ -669,7 +706,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputHangarM;
     private javax.swing.JTextField inputPasajerosBarcelona;
     private javax.swing.JTextField inputPasajerosMadrid;
-    private javax.swing.JToggleButton inputPausar;
     private javax.swing.JTextField inputRodajeB;
     private javax.swing.JTextField inputRodajeM;
     private javax.swing.JTextField inputTallerB;
