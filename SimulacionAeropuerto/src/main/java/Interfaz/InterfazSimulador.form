@@ -38,36 +38,28 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jPanel1" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="320" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jButton2" min="-2" pref="100" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="332" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jPanel2" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Component id="jPanel4" min="-2" pref="440" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="inputPausar" min="-2" pref="136" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="380" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jButton2" alignment="1" min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
+                  <Component id="inputPausar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jPanel2" min="-2" pref="463" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" pref="463" max="-2" attributes="0"/>
@@ -484,16 +476,6 @@
             </Container>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="jButton1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Pausar"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Reanudar"/>
-          </Properties>
-        </Component>
         <Container class="javax.swing.JPanel" name="jPanel1">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -962,6 +944,14 @@
             </Container>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JToggleButton" name="inputPausar">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Pausar"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inputPausarActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
+import java.util.concurrent.locks.Condition;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextField;
@@ -23,9 +24,9 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Atributos
     private final Lock modBus1 = new ReentrantLock();
-    private final JTextField[] puertasM;
     private final CircularProgressBar[] graficosM;
     private final CircularProgressBar[] graficosB;
+    private final JTextField[] puertasM;
     private final JTextField[] puertasB;
     private final JTextField[] pistasM;
     private final JTextField[] pistasB;
@@ -33,10 +34,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final Aeropuerto aeroBarcelona;
     private final HashSet<String> aeroviaMB = new HashSet<>();
     private final HashSet<String> aeroviaBM = new HashSet<>();
+    private boolean pausado = false; 
 
     //Atributos para la comunicación y sincronicación de hilos
     private final Lock lAeroviaMB = new ReentrantLock();
     private final Lock lAeroviaBM = new ReentrantLock();
+    private final Lock lPausar = new ReentrantLock();
+    Condition simuladorPausado = lPausar.newCondition();
     
     //Constructor
     public InterfazSimulador() {
@@ -87,36 +91,44 @@ public class InterfazSimulador extends javax.swing.JFrame {
     });}
         
     //Modificaciones número de pasajeros
-    public void modPasajerosM(int n){
+    public void modPasajerosM(int n) throws InterruptedException{
+        pausar();
         inputPasajerosMadrid.setText(String.valueOf(n));
     }
-    public void modPasajerosB(int n){
+    public void modPasajerosB(int n) throws InterruptedException{
+        pausar();
         inputPasajerosBarcelona.setText(String.valueOf(n));
     }
     
     //Modificaciones de llegadas y salidas de buses
-    public void modBusCiudadM(String Id){
+    public void modBusCiudadM(String Id) throws InterruptedException{
+        pausar();
         inputBusMadrid.setText(Id);
     }
-    public void modBusCiudadB(String Id){
+    public void modBusCiudadB(String Id) throws InterruptedException{
+        pausar();
         inputBusBarcelona.setText(Id);
     }
-    public void modAeroM(String Id){
+    public void modAeroM(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroM.setText(Id);
     }
-    public void modAeroB(String Id){
+    public void modAeroB(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroB.setText(Id);
     }
 
     //Modificaciones de hangares
-    public void modHangarM(HashSet<String> hangar){
+    public void modHangarM(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
         }
         inputHangarM.setText(joiner.toString());
     }
-    public void modHangarB(HashSet<String> hangar){
+    public void modHangarB(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
@@ -125,25 +137,30 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
     
     //Modificaciones de las puertas
-    public CircularProgressBar modPuertasM(int puerta, String id){  
+    public CircularProgressBar modPuertasM(int puerta, String id) throws InterruptedException{  
+        pausar();
         puertasM[puerta].setText(id);
         return graficosM[puerta];
     }
-    public CircularProgressBar modPuertasB(int puerta, String id){
+    public CircularProgressBar modPuertasB(int puerta, String id) throws InterruptedException{
+        pausar();
         puertasB[puerta].setText(id);
         return graficosB[puerta];
     }
     
     //Modificaciones de las pistas
-    public void modPistasM(int pista, String id){
+    public void modPistasM(int pista, String id) throws InterruptedException{
+        pausar();
         pistasM[pista].setText(id);
     }
-    public void modPistasB(int pista, String id){
+    public void modPistasB(int pista, String id) throws InterruptedException{
+        pausar();
         pistasB[pista].setText(id);
     }
     
     //Actualizar aerovías
-    public void modAeroviaMB(){
+    public void modAeroviaMB() throws InterruptedException{
+        pausar();
         lAeroviaMB.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaMB){
@@ -152,7 +169,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputAerovMB.setText(joiner.toString());
         lAeroviaMB.unlock();
     }
-    public void modAeroviaBM(){
+    public void modAeroviaBM() throws InterruptedException{
+        pausar();
         lAeroviaBM.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaBM){
@@ -164,6 +182,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Uso de aerovías
     public void usoAeroviaMB(Avion a) throws InterruptedException{
+        pausar();
         aeroviaMB.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Madrid-Barcelona. ");
@@ -171,30 +190,33 @@ public class InterfazSimulador extends javax.swing.JFrame {
         a.setAeropuerto(aeroBarcelona);
     }
     public void usoAeroviaBM(Avion a)throws InterruptedException{
+        pausar();
         aeroviaBM.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Barcelona-Madrid. ");
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroMadrid);
     }
-    public void salirAerovMB(Avion a){
+    public void salirAerovMB(Avion a) throws InterruptedException{
         aeroviaMB.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
     }
-    public void salirAerovBM(Avion a){
+    public void salirAerovBM(Avion a) throws InterruptedException{
         aeroviaBM.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
     }
     
     //Actualizar rodaje
-    public void modRodajeM(HashSet<String> rodaje){
+    public void modRodajeM(HashSet<String> rodaje) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: rodaje){
             joiner.add(avion);
         }
         inputRodajeM.setText(joiner.toString());
     }
-    public void modRodajeB(HashSet<String> rodaje){
+    public void modRodajeB(HashSet<String> rodaje) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: rodaje){
             joiner.add(avion);
@@ -203,14 +225,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
 
     //Actualizar estacionamiento
-    public void modEstacionamientoM(HashSet<String> estacionamiento){
+    public void modEstacionamientoM(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
         }
         inputEstacionamientoM.setText(joiner.toString());
     }
-    public void modEstacionamientoB(HashSet<String> estacionamiento){
+    public void modEstacionamientoB(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
@@ -219,14 +243,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
  
     //Actualizar talleres
-    public void modTallerM(HashSet<String> taller){
+    public void modTallerM(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
         }
         inputTallerM.setText(joiner.toString());
     }
-    public void modTallerB(HashSet<String> taller){
+    public void modTallerB(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
@@ -278,8 +304,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP2 = new javax.swing.JPanel();
         ocupacionP4 = new javax.swing.JPanel();
         ocupacionP5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
@@ -325,6 +349,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP8 = new javax.swing.JPanel();
         ocupacionP11 = new javax.swing.JPanel();
         ocupacionP10 = new javax.swing.JPanel();
+        inputPausar = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -426,10 +451,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP5.setPreferredSize(new java.awt.Dimension(30, 30));
         ocupacionP5.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 20, 20));
-
-        jButton1.setText("Pausar");
-
-        jButton2.setText("Reanudar");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aerovías", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
@@ -564,6 +585,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP10.setLayout(new java.awt.BorderLayout());
         jPanel4.add(ocupacionP10, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));
 
+        inputPausar.setText("Pausar");
+        inputPausar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputPausarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -574,26 +602,22 @@ public class InterfazSimulador extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(320, 320, 320)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(332, 332, 332))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(4, 4, 4)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(inputPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(380, 380, 380))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addComponent(inputPausar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -607,6 +631,27 @@ public class InterfazSimulador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inputPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPausarActionPerformed
+        if(inputPausar.isSelected()){
+            inputPausar.setText("Reanudar");
+            pausado = true;
+        }else{
+            inputPausar.setText("Pausar");
+            pausado = false; 
+            lPausar.lock();
+            simuladorPausado.signalAll();
+            lPausar.unlock();
+        }
+    }//GEN-LAST:event_inputPausarActionPerformed
+    public void pausar() throws InterruptedException{
+        lPausar.lock();
+        try{
+            if(pausado){
+                simuladorPausado.await();}
+        }finally{
+            lPausar.unlock();
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -624,12 +669,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputHangarM;
     private javax.swing.JTextField inputPasajerosBarcelona;
     private javax.swing.JTextField inputPasajerosMadrid;
+    private javax.swing.JToggleButton inputPausar;
     private javax.swing.JTextField inputRodajeB;
     private javax.swing.JTextField inputRodajeM;
     private javax.swing.JTextField inputTallerB;
     private javax.swing.JTextField inputTallerM;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

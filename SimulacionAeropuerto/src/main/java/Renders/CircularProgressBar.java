@@ -23,7 +23,7 @@ public class CircularProgressBar extends JPanel {
     public CircularProgressBar() {
         this.progress = 0;
         this.progressColor = Color.black;
-        setPreferredSize(new Dimension(20, 20)); // Tamaño aproximado de 30x30
+        setPreferredSize(new Dimension(20, 20)); // Tamaño aproximado de 20x20
     }
 
     public void setProgress(int progress) {

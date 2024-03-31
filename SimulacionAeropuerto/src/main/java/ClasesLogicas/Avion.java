@@ -3,6 +3,7 @@ import ClasesLogicas.Aeropuerto;
 import Renders.CircularProgressBar;
 import static java.lang.Math.*;
 import java.util.Random; 
+import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ public class Avion implements Runnable{
         char letra2 = (char) ('A' + random.nextInt(26));
         this.id = Character.toString(letra1) + Character.toString(letra2)+ "-"+cod;
         this.numVuelos = 0;
+        logger.registrarEvento("Avion " + id + " es creado. ");
     }
     
     //Métodos getter y setter

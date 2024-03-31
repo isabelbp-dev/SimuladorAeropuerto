@@ -3,6 +3,7 @@ import ClasesLogicas.Aeropuerto;
 import Interfaz.InterfazSimulador;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
 /**
  *
  * @author isaba
@@ -23,6 +24,7 @@ public class Autobus implements Runnable{
         this.ocupacion = 0;
         this.aero = aeropuerto;
         this.simulador = s;
+        logger.registrarEvento("Bus " + id + " es creado. ");
     }
     
     //Ciclo de vida del autobus

@@ -46,7 +46,6 @@ public class RegistroLog {
             e.printStackTrace();
         }
     }
-
     public synchronized void close() {
         try {
             writer.close();
