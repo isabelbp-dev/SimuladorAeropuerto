@@ -674,8 +674,20 @@ public class InterfazSimulador extends javax.swing.JFrame {
         datos.put("Máx. Barcelona",maxPasajerosB);
         return datos;
     }
+    public LinkedHashMap datosDistribucion(){
+        LinkedHashMap<String, Integer> datos = new LinkedHashMap<>();
+        datos.put("Hangar M.", aeroMadrid.getHangar().size());
+        datos.put("Hangar B.", aeroBarcelona.getHangar().size());
+        datos.put("Taller M.", aeroMadrid.getTaller().size());
+        datos.put("Taller B.", aeroBarcelona.getTaller().size());
+        datos.put("Est. M.", aeroMadrid.getEstacionamiento().size());
+        datos.put("Est. B.", aeroBarcelona.getEstacionamiento().size());
+        datos.put("Rodaje M.", aeroMadrid.getRodaje().size());
+        datos.put("Rodaje B.", aeroBarcelona.getRodaje().size());
+        return datos;
+    }
     private void bEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEstadisticasActionPerformed
-        EstadisticasActuales estadisticas = new EstadisticasActuales(datosOcupacion());
+        EstadisticasActuales estadisticas = new EstadisticasActuales(this);
         estadisticas.setVisible(true);
     }//GEN-LAST:event_bEstadisticasActionPerformed
     public void pausar() throws InterruptedException{

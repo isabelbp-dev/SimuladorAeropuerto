@@ -32,11 +32,11 @@ public class BarChartPanel extends JPanel {
     private void dibujarGraficoDeBarras(Graphics g) {
         int ancho = getWidth();
         int alto = getHeight();
-        int margen = 25;
-        int margenDerecho = 75; // Margen derecho adicional
-        int margenEtiquetas = 50;
+        int margen = 27;
+        int margenDerecho = 85; // Margen derecho adicional
+        int margenEtiquetas = 0;
         int numeroBarras = valores.size();
-        int anchoBarra = (ancho - (2 * margen) - margenEtiquetas - margenDerecho) / numeroBarras;
+        int anchoBarra = (ancho - (2 * margen) - margenEtiquetas - 2*margenDerecho) / numeroBarras;
         int alturaMaxBarra = alto - 2 * margen;
 
         int posX = margen + margenEtiquetas;

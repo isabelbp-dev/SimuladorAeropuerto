@@ -58,6 +58,18 @@ public class Aeropuerto {
     public String getNombre(){
         return nombre;
     }
+    public HashSet getHangar(){
+        return hangar;
+    }
+    public HashSet getTaller(){
+        return taller;
+    }
+    public HashSet getEstacionamiento(){
+        return estacionamiento;
+    }
+    public HashSet getRodaje(){
+        return rodaje;
+    }
     
     //Llegada y salida de pasajeros
     public void actualizarNumPasajeros(int num) throws InterruptedException{

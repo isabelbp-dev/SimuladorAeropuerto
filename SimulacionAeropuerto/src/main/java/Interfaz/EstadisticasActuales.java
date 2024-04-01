@@ -13,23 +13,27 @@ import java.util.LinkedHashMap;
  * @author isaba
  */
 public class EstadisticasActuales extends javax.swing.JFrame {
-
+    private final InterfazSimulador simulador;
     /**
      * Creates new form EstadisticasActuales
      */
-    public EstadisticasActuales(LinkedHashMap datos) {
+    public EstadisticasActuales(InterfazSimulador s) {
         initComponents();
+        this.simulador = s;
+        LinkedHashMap datos = s.datosOcupacion();
+        groupEstadisticas.add(bNumP);
+        groupEstadisticas.add(bDistA);
+        pintar(datos);
+        setLocationRelativeTo(null);
+        bNumP.setSelected(true);
+    }
+    
+    public void pintar(LinkedHashMap datos){
         BarChartPanel barChartPanel = new BarChartPanel(datos);
-        barChartPanel.setPreferredSize(new Dimension(510, 330));
+        barChartPanel.setPreferredSize(pGrafico.getSize());
         pGrafico.add(barChartPanel);
         pack();
-        setLocationRelativeTo(null);
     }
-
-    private EstadisticasActuales() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,9 +43,11 @@ public class EstadisticasActuales extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        groupEstadisticas = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        bNumP = new javax.swing.JRadioButton();
+        bDistA = new javax.swing.JRadioButton();
         pGrafico = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -49,7 +55,19 @@ public class EstadisticasActuales extends javax.swing.JFrame {
 
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jRadioButton1.setText("jRadioButton1");
+        bNumP.setText("Número de pasajeros");
+        bNumP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bNumPActionPerformed(evt);
+            }
+        });
+
+        bDistA.setText("Distribución de aviones");
+        bDistA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDistAActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -57,14 +75,18 @@ public class EstadisticasActuales extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bNumP, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bDistA, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bNumP)
+                    .addComponent(bDistA))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
@@ -99,14 +121,26 @@ public class EstadisticasActuales extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bDistAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDistAActionPerformed
+       LinkedHashMap datos = simulador.datosDistribucion();
+       pintar(datos);
+    }//GEN-LAST:event_bDistAActionPerformed
+
+    private void bNumPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNumPActionPerformed
+       LinkedHashMap datos = simulador.datosOcupacion();
+       pintar(datos);
+    }//GEN-LAST:event_bNumPActionPerformed
+
     /**
      * @param args the command line arguments
      */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton bDistA;
+    private javax.swing.JRadioButton bNumP;
+    private javax.swing.ButtonGroup groupEstadisticas;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JPanel pGrafico;
     // End of variables declaration//GEN-END:variables
 }
