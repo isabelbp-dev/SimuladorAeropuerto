@@ -58,6 +58,18 @@ public class Aeropuerto {
     public String getNombre(){
         return nombre;
     }
+    public HashSet getHangar(){
+        return hangar;
+    }
+    public HashSet getTaller(){
+        return taller;
+    }
+    public HashSet getEstacionamiento(){
+        return estacionamiento;
+    }
+    public HashSet getRodaje(){
+        return rodaje;
+    }
     
     //Llegada y salida de pasajeros
     public void actualizarNumPasajeros(int num) throws InterruptedException{
@@ -67,10 +79,12 @@ public class Aeropuerto {
             simulador.modPasajerosB(num);
     }}
     public synchronized void llegadaPasajeros(int num) throws InterruptedException{
+        simulador.pausar();
         ocupacion += num;
         actualizarNumPasajeros(ocupacion);
     }
     public synchronized int salidaPasajeros(int num) throws InterruptedException{
+        simulador.pausar();
         if(ocupacion >= num){
             ocupacion -= num;
         }else{
@@ -83,6 +97,7 @@ public class Aeropuerto {
     //Llegada y salida de buses
     public void llegadaBus(String id) throws InterruptedException{
         llegadaB.lock();
+        simulador.pausar();
         if(nombre == "Madrid"){
            simulador.modAeroM(id);
         }else{
@@ -92,6 +107,7 @@ public class Aeropuerto {
     }
     public void salidaBus(String id) throws InterruptedException{
         salidaB.lock();
+        simulador.pausar();
         if(nombre == "Madrid"){
            simulador.modBusCiudadM(id);
         }else{
@@ -103,12 +119,14 @@ public class Aeropuerto {
     //Llegada y salida de aviones al hangar
     public void llegadaHangar(String id) throws InterruptedException{
         lHangar.lock();
+        simulador.pausar();
         hangar.add(id);
         actualizarHangar();
         lHangar.unlock();
     }
     public void salidaHangar(String id) throws InterruptedException{
         lHangar.lock();
+        simulador.pausar();
         hangar.remove(id);
         actualizarHangar();
         lHangar.unlock();
@@ -122,8 +140,9 @@ public class Aeropuerto {
     }
     
     //Solicitudes, asignaciones y salidas de las puertas de embarque
-    public Object[] solPuertaEmbarque(String id){
+    public Object[] solPuertaEmbarque(String id) throws InterruptedException{
         puertas.lock();
+        simulador.pausar();
         int n = 0;
         CircularProgressBar c = new CircularProgressBar(); 
         try{
@@ -140,8 +159,9 @@ public class Aeropuerto {
             puertas.unlock();}
         return new Object[]{n, c};
     }
-    public int solPuertaDesembarque(String id){
+    public int solPuertaDesembarque(String id) throws InterruptedException{
         puertas.lock();
+        simulador.pausar();
         int n = 0;
         try{
             n = puertasEmbarque.subList(1, 6).lastIndexOf(null);
@@ -160,6 +180,7 @@ public class Aeropuerto {
     }
     public void liberarPuerta(int n) throws InterruptedException{
         puertas.lock();
+        simulador.pausar();
         if(n > 0){
             puertaDesembarque.signalAll();
         }if(n < 5){
@@ -182,6 +203,7 @@ public class Aeropuerto {
     //Operaciones relacionadas con las pistas de despegue y aterrizaje
     public void solPistaDespegue(String id, int pasajeros) throws InterruptedException{
         semPistas.acquire();
+        simulador.pausar();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, id);
         salidaRodaje(id);
@@ -197,6 +219,7 @@ public class Aeropuerto {
             Thread.sleep(1000+(int)(Math.random()*4000));
             encontrada = semPistas.tryAcquire();
         }
+        simulador.pausar();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, a.getId());
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a pista " + pista + " para aterrizar. ");
@@ -217,6 +240,7 @@ public class Aeropuerto {
     }
     public void liberarPista(int pista) throws InterruptedException{
         lPistas.lock();
+        simulador.pausar();
         pistas.set(pista, null);
         actualizarPistas(pista, null);
         lPistas.unlock();
@@ -231,6 +255,7 @@ public class Aeropuerto {
     
     //Vuelo de aviones o uso de aerovías
     public void volar(Avion a) throws InterruptedException{
+        simulador.pausar();
         if(nombre == "Madrid"){
             simulador.usoAeroviaMB(a);
         }else{
@@ -241,12 +266,14 @@ public class Aeropuerto {
     //Llegadas y salidas al área de rodaje
     public void llegadaRodaje(String id) throws InterruptedException{
         lRodaje.lock();
+        simulador.pausar();
         rodaje.add(id);
         actualizarRodaje();
         lRodaje.unlock();
     }
     public void salidaRodaje(String id) throws InterruptedException{
         lRodaje.lock();
+        simulador.pausar();
         rodaje.remove(id);
         actualizarRodaje();
         lRodaje.unlock();
@@ -262,12 +289,14 @@ public class Aeropuerto {
     //Llegadas y salidas al área de estacionamiento
     public void llegadaEstacionamiento(String id) throws InterruptedException{
         lEstacionamiento.lock();
+        simulador.pausar();
         estacionamiento.add(id);
         actualizarEstacionamiento();
         lEstacionamiento.unlock();
     }
     public void salidaEstacionamiento(String id) throws InterruptedException{
         lEstacionamiento.lock();
+        simulador.pausar();
         estacionamiento.remove(id);
         actualizarEstacionamiento();
         lEstacionamiento.unlock();
@@ -284,6 +313,7 @@ public class Aeropuerto {
     public void revisionRapida(String id) throws InterruptedException{
         semTaller.acquire();
         puertaTaller.lock();
+        simulador.pausar();
         Thread.sleep(1000);
         taller.add(id);
         actualizarTaller();
@@ -299,6 +329,7 @@ public class Aeropuerto {
     }
     public void revisionProfunda(String id) throws InterruptedException{
         semTaller.acquire();
+        simulador.pausar();
         puertaTaller.lock();
         Thread.sleep(1000);
         taller.add(id);
