@@ -1,11 +1,8 @@
 package ClasesLogicas;
-import ClasesLogicas.Avion;
-import ClasesLogicas.Aeropuerto;
-import java.util.concurrent.locks.Lock;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class GeneradorAviones implements Runnable{

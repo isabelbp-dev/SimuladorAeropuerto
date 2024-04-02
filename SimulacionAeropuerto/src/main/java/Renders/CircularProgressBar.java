@@ -1,20 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Renders;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.*;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class CircularProgressBar extends JPanel {
     private int progress; // Progreso de la barra (0-100)

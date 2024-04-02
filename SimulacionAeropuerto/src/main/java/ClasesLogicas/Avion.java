@@ -1,15 +1,12 @@
 package ClasesLogicas;
-import ClasesLogicas.Aeropuerto;
 import Renders.CircularProgressBar;
-import static java.lang.Math.*;
 import java.util.Random; 
-import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class Avion implements Runnable{

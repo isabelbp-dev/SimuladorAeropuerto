@@ -5,18 +5,15 @@ import ClasesLogicas.GeneradorAutobus;
 import ClasesLogicas.GeneradorAviones;
 import ClasesLogicas.RegistroLog;
 import Renders.CircularProgressBar;
-import java.awt.Dimension;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class InterfazSimulador extends javax.swing.JFrame {
