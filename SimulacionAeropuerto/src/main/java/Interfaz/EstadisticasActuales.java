@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaz;
-
 import Renders.BarChartPanel;
-import java.awt.Dimension;
 import java.util.LinkedHashMap;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 public class EstadisticasActuales extends javax.swing.JFrame {
     private final InterfazSimulador simulador;

@@ -1,18 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Renders;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Map;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class BarChartPanel extends JPanel {
     private Map<String, Integer> valores;

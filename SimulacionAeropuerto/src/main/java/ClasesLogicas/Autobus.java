@@ -1,12 +1,9 @@
 package ClasesLogicas;
-import ClasesLogicas.Aeropuerto;
 import Interfaz.InterfazSimulador;
-import java.util.LinkedList;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class Autobus implements Runnable{

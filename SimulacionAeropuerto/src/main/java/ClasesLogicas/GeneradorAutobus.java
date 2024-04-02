@@ -1,12 +1,9 @@
 package ClasesLogicas;
-import ClasesLogicas.Autobus;
-import ClasesLogicas.Aeropuerto;
 import Interfaz.InterfazSimulador;
-import java.util.concurrent.locks.Lock;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class GeneradorAutobus implements Runnable{
