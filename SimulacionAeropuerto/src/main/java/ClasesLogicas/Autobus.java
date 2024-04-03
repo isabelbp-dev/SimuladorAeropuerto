@@ -2,7 +2,7 @@ package ClasesLogicas;
 import Interfaz.InterfazSimulador;
 import java.util.Random;
 /**
- *
+ * Clase que representa a los autobuses del simulador
  * @author Isabel Barquilla
  */
 
@@ -16,6 +16,12 @@ public class Autobus implements Runnable{
     private InterfazSimulador simulador;
     
     //Constructor
+    /**
+     * Constructor de la clase Autobús
+     * @param cod: Codigo usado para la creación del ID del bús, correspondiente al número de bus creado
+     * @param aeropuerto: Aeropuerto al que estará asociado el autobús
+     * @param s: Simulador donde se mostrarán las distintas operaciones hechas por el bus
+     */
     public Autobus(String cod, Aeropuerto aeropuerto, InterfazSimulador s){
         this.id = "B-" + cod;
         this.ocupacion = 0;
@@ -24,7 +30,9 @@ public class Autobus implements Runnable{
         logger.registrarEvento("Bus " + id + " es creado. ");
     }
     
-    //Ciclo de vida del autobus
+    /**
+     * Ciclo de vida del bús
+     */
     public void run() {
         while(true){
             try{

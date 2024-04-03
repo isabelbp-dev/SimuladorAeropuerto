@@ -8,7 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * Clase que representa a los aeropueros del simulador.
  * @author Isabel Barquilla
  */
 

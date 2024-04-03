@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase que representa a los aviones del simulador
  * @author Isabel Barquilla
  */
 
