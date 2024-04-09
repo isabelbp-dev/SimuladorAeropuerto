@@ -92,12 +92,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
         
     //Modificaciones número de pasajeros
     public void modPasajerosM(int n) throws InterruptedException{
+        pausar();
         inputPasajerosMadrid.setText(String.valueOf(n));
         if(n>maxPasajerosM){
             maxPasajerosM = n;
         }
     }
     public void modPasajerosB(int n) throws InterruptedException{
+        pausar();
         inputPasajerosBarcelona.setText(String.valueOf(n));
         if(n>maxPasajerosB){
             maxPasajerosB = n;
@@ -106,20 +108,25 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Modificaciones de llegadas y salidas de buses
     public void modBusCiudadM(String Id) throws InterruptedException{
+        pausar();
         inputBusMadrid.setText(Id);
     }
     public void modBusCiudadB(String Id) throws InterruptedException{
+        pausar();
         inputBusBarcelona.setText(Id);
     }
     public void modAeroM(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroM.setText(Id);
     }
     public void modAeroB(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroB.setText(Id);
     }
 
     //Modificaciones de hangares
     public void modHangarM(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
@@ -127,6 +134,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputHangarM.setText(joiner.toString());
     }
     public void modHangarB(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
@@ -136,24 +144,29 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Modificaciones de las puertas
     public CircularProgressBar modPuertasM(int puerta, String id) throws InterruptedException{  
+        pausar();
         puertasM[puerta].setText(id);
         return graficosM[puerta];
     }
     public CircularProgressBar modPuertasB(int puerta, String id) throws InterruptedException{
+        pausar();
         puertasB[puerta].setText(id);
         return graficosB[puerta];
     }
     
     //Modificaciones de las pistas
     public void modPistasM(int pista, String id) throws InterruptedException{
+        pausar();
         pistasM[pista].setText(id);
     }
     public void modPistasB(int pista, String id) throws InterruptedException{
+        pausar();
         pistasB[pista].setText(id);
     }
     
     //Actualizar aerovías
     public void modAeroviaMB() throws InterruptedException{
+        pausar();
         lAeroviaMB.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaMB){
@@ -163,6 +176,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         lAeroviaMB.unlock();
     }
     public void modAeroviaBM() throws InterruptedException{
+        pausar();
         lAeroviaBM.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaBM){
@@ -174,6 +188,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Uso de aerovías
     public void usoAeroviaMB(Avion a) throws InterruptedException{
+        pausar();
         aeroviaMB.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Madrid-Barcelona. ");
@@ -181,6 +196,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         a.setAeropuerto(aeroBarcelona);
     }
     public void usoAeroviaBM(Avion a)throws InterruptedException{
+        pausar();
         aeroviaBM.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Barcelona-Madrid. ");
@@ -188,16 +204,19 @@ public class InterfazSimulador extends javax.swing.JFrame {
         a.setAeropuerto(aeroMadrid);
     }
     public void salirAerovMB(Avion a) throws InterruptedException{
+        pausar();
         aeroviaMB.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
     }
     public void salirAerovBM(Avion a) throws InterruptedException{
+        pausar();
         aeroviaBM.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
     }
     
     //Actualizar rodaje
     public void modRodajeM(HashSet<String> rodaje) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: rodaje){
             joiner.add(avion);
@@ -214,6 +233,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
     //Actualizar estacionamiento
     public void modEstacionamientoM(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
@@ -221,6 +241,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputEstacionamientoM.setText(joiner.toString());
     }
     public void modEstacionamientoB(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
@@ -230,6 +251,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
  
     //Actualizar talleres
     public void modTallerM(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
@@ -237,6 +259,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputTallerM.setText(joiner.toString());
     }
     public void modTallerB(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
@@ -651,14 +674,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
     public LinkedHashMap datosDistribucion(){
         LinkedHashMap<String, Integer> datos = new LinkedHashMap<>();
-        datos.put("Hangar M.", aeroMadrid.getHangar().size());
-        datos.put("Hangar B.", aeroBarcelona.getHangar().size());
-        datos.put("Taller M.", aeroMadrid.getTaller().size());
-        datos.put("Taller B.", aeroBarcelona.getTaller().size());
-        datos.put("Est. M.", aeroMadrid.getEstacionamiento().size());
-        datos.put("Est. B.", aeroBarcelona.getEstacionamiento().size());
-        datos.put("Rodaje M.", aeroMadrid.getRodaje().size());
-        datos.put("Rodaje B.", aeroBarcelona.getRodaje().size());
+        datos.put("Hangar M.", (inputHangarM.getText().isEmpty() ? 0 : inputHangarM.getText().split(",").length));
+        datos.put("Hangar B.", (inputHangarB.getText().isEmpty() ? 0 : inputHangarB.getText().split(",").length));
+        datos.put("Taller M.", (inputTallerM.getText().isEmpty() ? 0 : inputTallerM.getText().split(",").length));
+        datos.put("Taller B.", (inputTallerB.getText().isEmpty() ? 0 : inputTallerB.getText().split(",").length));
+        datos.put("Est. M.", (inputEstacionamientoM.getText().isEmpty() ? 0 : inputEstacionamientoM.getText().split(",").length));
+        datos.put("Est. B.", (inputEstacionamientoB.getText().isEmpty() ? 0 : inputEstacionamientoB.getText().split(",").length));
+        datos.put("Rodaje M.", (inputRodajeM.getText().isEmpty() ? 0 : inputRodajeM.getText().split(",").length));
+        datos.put("Rodaje B.", (inputRodajeB.getText().isEmpty() ? 0 : inputRodajeB.getText().split(",").length));
         return datos;
     }
     private void bEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEstadisticasActionPerformed
