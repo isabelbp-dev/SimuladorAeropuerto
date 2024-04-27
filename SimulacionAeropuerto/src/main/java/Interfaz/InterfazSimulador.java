@@ -49,9 +49,13 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final Lock lPausar = new ReentrantLock();
     Condition simuladorPausado = lPausar.newCondition();
     
+    //Servidor
+    private final Thread server; 
+    
     //Constructor
     public InterfazSimulador() {
         initComponents();
+        
         bEstadisticas.setVisible(false);
         CircularProgressBar p1 = new CircularProgressBar();
         CircularProgressBar p2 = new CircularProgressBar();
@@ -88,9 +92,17 @@ public class InterfazSimulador extends javax.swing.JFrame {
         Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, this));
         gBuses.start();
         gAviones.start();
-        Servidor s = new Servidor(this);
+        this.server = new Thread( new Servidor(this));
+        server.start();
     }
-    
+
+    //Métodos get
+    public String getPasajerosM(){
+        return inputPasajerosMadrid.getText();
+    }
+    public String getPasajerosB(){
+        return inputPasajerosBarcelona.getText();
+    }    
     //Ciclo de vida
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
