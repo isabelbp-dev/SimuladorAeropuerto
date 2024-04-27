@@ -1,13 +1,13 @@
 package ClasesLogicas;
-import ClasesLogicas.Avion;
-import ClasesLogicas.Aeropuerto;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class GeneradorAviones implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private Aeropuerto aero1;
     private Aeropuerto aero2;

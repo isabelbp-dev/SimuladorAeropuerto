@@ -1,0 +1,70 @@
+2024-04-27 19:03:27 - Bus B-0000 es creado. 
+2024-04-27 19:03:27 - Avion PK-0000 es creado. 
+2024-04-27 19:03:27 - Avion PK-0000 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:27 - Avion PK-0000 accede a la puerta de embarque 1 para esperar pasajeros. 
+2024-04-27 19:03:28 - Bus B-0001 es creado. 
+2024-04-27 19:03:29 - Bus B-0002 es creado. 
+2024-04-27 19:03:30 - Bus B-0003 es creado. 
+2024-04-27 19:03:30 - Avion LS-0001 es creado. 
+2024-04-27 19:03:30 - Avion LS-0001 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:30 - Avion LS-0001 accede a la puerta de embarque 1 para esperar pasajeros. 
+2024-04-27 19:03:30 - Bus B-0004 es creado. 
+2024-04-27 19:03:31 - Bus B-0000 ha salido de Madrid ciudad con 11 pasajeros. 
+2024-04-27 19:03:31 - Bus B-0005 es creado. 
+2024-04-27 19:03:31 - Bus B-0006 es creado. 
+2024-04-27 19:03:32 - Avion PK-0002 es creado. 
+2024-04-27 19:03:32 - Avion PK-0002 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:32 - Avion PK-0002 accede a la puerta de embarque 2 para esperar pasajeros. 
+2024-04-27 19:03:32 - Bus B-0007 es creado. 
+2024-04-27 19:03:32 - Bus B-0004 ha salido de Madrid ciudad con 26 pasajeros. 
+2024-04-27 19:03:33 - Bus B-0001 ha salido de Barcelona ciudad con 41 pasajeros. 
+2024-04-27 19:03:33 - Bus B-0003 ha salido de Barcelona ciudad con 2 pasajeros. 
+2024-04-27 19:03:33 - Bus B-0008 es creado. 
+2024-04-27 19:03:33 - Avion LQ-0003 es creado. 
+2024-04-27 19:03:33 - Avion LQ-0003 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:33 - Avion LQ-0003 accede a la puerta de embarque 2 para esperar pasajeros. 
+2024-04-27 19:03:33 - Bus B-0002 ha salido de Madrid ciudad con 50 pasajeros. 
+2024-04-27 19:03:34 - Bus B-0009 es creado. 
+2024-04-27 19:03:34 - Bus B-0005 ha salido de Barcelona ciudad con 29 pasajeros. 
+2024-04-27 19:03:34 - Bus B-0006 ha salido de Madrid ciudad con 32 pasajeros. 
+2024-04-27 19:03:34 - Bus B-0010 es creado. 
+2024-04-27 19:03:35 - Bus B-0011 es creado. 
+2024-04-27 19:03:35 - Avion TZ-0004 es creado. 
+2024-04-27 19:03:35 - Avion TZ-0004 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:35 - Avion TZ-0004 accede a la puerta de embarque 3 para esperar pasajeros. 
+2024-04-27 19:03:36 - Bus B-0012 es creado. 
+2024-04-27 19:03:36 - Bus B-0000 ha dejado 11 pasajeros en el aeropuerto de Madrid. 
+2024-04-27 19:03:36 - Bus B-0013 es creado. 
+2024-04-27 19:03:36 - Bus B-0007 ha salido de Barcelona ciudad con 37 pasajeros. 
+2024-04-27 19:03:37 - Avion IS-0005 es creado. 
+2024-04-27 19:03:37 - Avion IS-0005 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:37 - Avion IS-0005 accede a la puerta de embarque 3 para esperar pasajeros. 
+2024-04-27 19:03:37 - Bus B-0010 ha salido de Madrid ciudad con 16 pasajeros. 
+2024-04-27 19:03:37 - Bus B-0008 ha salido de Madrid ciudad con 0 pasajeros. 
+2024-04-27 19:03:37 - Bus B-0014 es creado. 
+2024-04-27 19:03:38 - Bus B-0015 es creado. 
+2024-04-27 19:03:38 - Bus B-0011 ha salido de Barcelona ciudad con 25 pasajeros. 
+2024-04-27 19:03:38 - Bus B-0009 ha salido de Barcelona ciudad con 0 pasajeros. 
+2024-04-27 19:03:38 - Bus B-0016 es creado. 
+2024-04-27 19:03:39 - Bus B-0012 ha salido de Madrid ciudad con 24 pasajeros. 
+2024-04-27 19:03:39 - Avion KH-0006 es creado. 
+2024-04-27 19:03:39 - Avion KH-0006 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:39 - Avion KH-0006 accede a la puerta de embarque 4 para esperar pasajeros. 
+2024-04-27 19:03:39 - Bus B-0013 ha salido de Barcelona ciudad con 35 pasajeros. 
+2024-04-27 19:03:39 - Bus B-0017 es creado. 
+2024-04-27 19:03:39 - Bus B-0014 ha salido de Madrid ciudad con 37 pasajeros. 
+2024-04-27 19:03:40 - Avion LS-0001 (0/162 pasajeros) accede al área de rodaje en espera de una pista de despegue. 
+2024-04-27 19:03:40 - Bus B-0018 es creado. 
+2024-04-27 19:03:40 - Bus B-0000 ha salido del aeropuerto de Madrid con 0 pasajeros. 
+2024-04-27 19:03:41 - Bus B-0019 es creado. 
+2024-04-27 19:03:41 - Bus B-0015 ha salido de Barcelona ciudad con 17 pasajeros. 
+2024-04-27 19:03:41 - Bus B-0005 ha dejado 29 pasajeros en el aeropuerto de Barcelona. 
+2024-04-27 19:03:41 - Avion WF-0007 es creado. 
+2024-04-27 19:03:41 - Avion WF-0007 ha llegado al area de estacionamiento. 
+2024-04-27 19:03:41 - Avion WF-0007 accede a la puerta de embarque 1 para esperar pasajeros. 
+2024-04-27 19:03:41 - Bus B-0016 ha salido de Madrid ciudad con 8 pasajeros. 
+2024-04-27 19:03:41 - Avión LS-0001 (0 pasajeros) accede a pista 0 para despegue. 
+2024-04-27 19:03:41 - Bus B-0001 ha dejado 41 pasajeros en el aeropuerto de Barcelona. 
+2024-04-27 19:03:41 - Bus B-0020 es creado. 
+2024-04-27 19:03:42 - Avion PG-0008 es creado. 
+2024-04-27 19:03:42 - Avion PG-0008 ha llegado al area de estacionamiento. 

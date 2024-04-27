@@ -1,18 +1,19 @@
 package ClasesLogicas;
-import ClasesLogicas.Autobus;
-import ClasesLogicas.Aeropuerto;
 import Interfaz.InterfazSimulador;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class GeneradorAutobus implements Runnable{
+    RegistroLog logger = RegistroLog.getInstance();
+    
     //Atributos
     private Aeropuerto aeropuerto1;
     private Aeropuerto aeropuerto2;
-    private InterfazSimulador simulador; 
+    private InterfazSimulador simulador;
+
     
     //Constructor
     public GeneradorAutobus(Aeropuerto aero1, Aeropuerto aero2, InterfazSimulador s){

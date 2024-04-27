@@ -3,19 +3,36 @@ import ClasesLogicas.Aeropuerto;
 import ClasesLogicas.Avion;
 import ClasesLogicas.GeneradorAutobus;
 import ClasesLogicas.GeneradorAviones;
+import ClasesLogicas.RegistroLog;
+import ClasesLogicas.Servidor;
+import Renders.CircularProgressBar;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
+import java.util.concurrent.locks.Condition;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
  *
- * @author isaba
+ * @author Isabel Barquilla
  */
 
 public class InterfazSimulador extends javax.swing.JFrame {
+    private final RegistroLog logger = RegistroLog.getInstance();
+    private int maxPasajerosM = 0;
+    private int maxPasajerosB = 0; 
+    
     //Atributos
     private final Lock modBus1 = new ReentrantLock();
+    private final CircularProgressBar[] graficosM;
+    private final CircularProgressBar[] graficosB;
     private final JTextField[] puertasM;
     private final JTextField[] puertasB;
     private final JTextField[] pistasM;
@@ -24,15 +41,45 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final Aeropuerto aeroBarcelona;
     private final HashSet<String> aeroviaMB = new HashSet<>();
     private final HashSet<String> aeroviaBM = new HashSet<>();
+    private boolean pausado = false; 
 
     //Atributos para la comunicación y sincronicación de hilos
     private final Lock lAeroviaMB = new ReentrantLock();
     private final Lock lAeroviaBM = new ReentrantLock();
+    private final Lock lPausar = new ReentrantLock();
+    Condition simuladorPausado = lPausar.newCondition();
+    
+    //Servidor
+    private final Thread server; 
     
     //Constructor
     public InterfazSimulador() {
         initComponents();
+        
+        bEstadisticas.setVisible(false);
+        CircularProgressBar p1 = new CircularProgressBar();
+        CircularProgressBar p2 = new CircularProgressBar();
+        CircularProgressBar p3 = new CircularProgressBar();
+        CircularProgressBar p4 = new CircularProgressBar();
+        CircularProgressBar p5 = new CircularProgressBar();
+        CircularProgressBar p7 = new CircularProgressBar();
+        CircularProgressBar p8 = new CircularProgressBar();
+        CircularProgressBar p9 = new CircularProgressBar();
+        CircularProgressBar p10 = new CircularProgressBar();
+        CircularProgressBar p11 = new CircularProgressBar();
+        ocupacionP1.add(p1);
+        ocupacionP2.add(p2);
+        ocupacionP3.add(p3);
+        ocupacionP4.add(p4);
+        ocupacionP5.add(p5);
+        ocupacionP7.add(p7);
+        ocupacionP8.add(p8);
+        ocupacionP9.add(p9);
+        ocupacionP10.add(p10);
+        ocupacionP11.add(p11);
         this.puertasM = new JTextField[]{puerta1M, puerta2M, puerta3M, puerta4M, puerta5M, puerta6M};
+        this.graficosM =  new CircularProgressBar[]{p1, p2, p3, p4, p5, null};
+        this.graficosB =  new CircularProgressBar[]{p7, p8, p9, p10, p11, null};
         this.puertasB = new JTextField[]{puerta1B, puerta2B, puerta3B, puerta4B, puerta5B, puerta6B};
         this.pistasM = new JTextField[]{pista1M, pista2M, pista3M, pista4M};
         this.pistasB = new JTextField[]{pista1B, pista2B, pista3B, pista4B};
@@ -45,8 +92,17 @@ public class InterfazSimulador extends javax.swing.JFrame {
         Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, this));
         gBuses.start();
         gAviones.start();
+        this.server = new Thread( new Servidor(this));
+        server.start();
     }
-    
+
+    //Métodos get
+    public String getPasajerosM(){
+        return inputPasajerosMadrid.getText();
+    }
+    public String getPasajerosB(){
+        return inputPasajerosBarcelona.getText();
+    }    
     //Ciclo de vida
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -56,36 +112,50 @@ public class InterfazSimulador extends javax.swing.JFrame {
     });}
         
     //Modificaciones número de pasajeros
-    public void modPasajerosM(int n){
+    public void modPasajerosM(int n) throws InterruptedException{
+        pausar();
         inputPasajerosMadrid.setText(String.valueOf(n));
+        if(n>maxPasajerosM){
+            maxPasajerosM = n;
+        }
     }
-    public void modPasajerosB(int n){
+    public void modPasajerosB(int n) throws InterruptedException{
+        pausar();
         inputPasajerosBarcelona.setText(String.valueOf(n));
+        if(n>maxPasajerosB){
+            maxPasajerosB = n;
+        }
     }
     
     //Modificaciones de llegadas y salidas de buses
-    public void modBusCiudadM(String Id){
+    public void modBusCiudadM(String Id) throws InterruptedException{
+        pausar();
         inputBusMadrid.setText(Id);
     }
-    public void modBusCiudadB(String Id){
+    public void modBusCiudadB(String Id) throws InterruptedException{
+        pausar();
         inputBusBarcelona.setText(Id);
     }
-    public void modAeroM(String Id){
+    public void modAeroM(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroM.setText(Id);
     }
-    public void modAeroB(String Id){
+    public void modAeroB(String Id) throws InterruptedException{
+        pausar();
         inputBusAeroB.setText(Id);
     }
 
     //Modificaciones de hangares
-    public void modHangarM(HashSet<String> hangar){
+    public void modHangarM(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
         }
         inputHangarM.setText(joiner.toString());
     }
-    public void modHangarB(HashSet<String> hangar){
+    public void modHangarB(HashSet<String> hangar) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: hangar){
             joiner.add(avion);
@@ -94,23 +164,30 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
     
     //Modificaciones de las puertas
-    public void modPuertasM(int puerta, String id){  
+    public CircularProgressBar modPuertasM(int puerta, String id) throws InterruptedException{  
+        pausar();
         puertasM[puerta].setText(id);
+        return graficosM[puerta];
     }
-    public void modPuertasB(int puerta, String id){
+    public CircularProgressBar modPuertasB(int puerta, String id) throws InterruptedException{
+        pausar();
         puertasB[puerta].setText(id);
+        return graficosB[puerta];
     }
     
     //Modificaciones de las pistas
-    public void modPistasM(int pista, String id){
+    public void modPistasM(int pista, String id) throws InterruptedException{
+        pausar();
         pistasM[pista].setText(id);
     }
-    public void modPistasB(int pista, String id){
+    public void modPistasB(int pista, String id) throws InterruptedException{
+        pausar();
         pistasB[pista].setText(id);
     }
     
     //Actualizar aerovías
-    public void modAeroviaMB(){
+    public void modAeroviaMB() throws InterruptedException{
+        pausar();
         lAeroviaMB.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaMB){
@@ -119,7 +196,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputAerovMB.setText(joiner.toString());
         lAeroviaMB.unlock();
     }
-    public void modAeroviaBM(){
+    public void modAeroviaBM() throws InterruptedException{
+        pausar();
         lAeroviaBM.lock();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: aeroviaBM){
@@ -131,35 +209,42 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     //Uso de aerovías
     public void usoAeroviaMB(Avion a) throws InterruptedException{
+        pausar();
         aeroviaMB.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
+        logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Madrid-Barcelona. ");
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroBarcelona);
     }
     public void usoAeroviaBM(Avion a)throws InterruptedException{
+        pausar();
         aeroviaBM.add(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
+        logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a la aerovía Barcelona-Madrid. ");
         Thread.sleep(15000+(int)(Math.random()*15000));
         a.setAeropuerto(aeroMadrid);
     }
-    public void salirAerovMB(Avion a){
+    public void salirAerovMB(Avion a) throws InterruptedException{
+        pausar();
         aeroviaMB.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaMB();
     }
-    public void salirAerovBM(Avion a){
+    public void salirAerovBM(Avion a) throws InterruptedException{
+        pausar();
         aeroviaBM.remove(a.getId() + "("+a.getOcupacion()+"/"+a.getCapacidad()+")");
         modAeroviaBM();
     }
     
     //Actualizar rodaje
-    public void modRodajeM(HashSet<String> rodaje){
+    public void modRodajeM(HashSet<String> rodaje) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: rodaje){
             joiner.add(avion);
         }
         inputRodajeM.setText(joiner.toString());
     }
-    public void modRodajeB(HashSet<String> rodaje){
+    public void modRodajeB(HashSet<String> rodaje) throws InterruptedException{
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: rodaje){
             joiner.add(avion);
@@ -168,14 +253,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
 
     //Actualizar estacionamiento
-    public void modEstacionamientoM(HashSet<String> estacionamiento){
+    public void modEstacionamientoM(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
         }
         inputEstacionamientoM.setText(joiner.toString());
     }
-    public void modEstacionamientoB(HashSet<String> estacionamiento){
+    public void modEstacionamientoB(HashSet<String> estacionamiento) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: estacionamiento){
             joiner.add(avion);
@@ -184,14 +271,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     }
  
     //Actualizar talleres
-    public void modTallerM(HashSet<String> taller){
+    public void modTallerM(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
         }
         inputTallerM.setText(joiner.toString());
     }
-    public void modTallerB(HashSet<String> taller){
+    public void modTallerB(HashSet<String> taller) throws InterruptedException{
+        pausar();
         StringJoiner joiner = new StringJoiner(",");
         for(String avion: taller){
             joiner.add(avion);
@@ -204,6 +293,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        ocupacionP3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         inputBusMadrid = new javax.swing.JTextField();
@@ -238,8 +328,15 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         pista2M = new javax.swing.JTextField();
         pista4M = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        ocupacionP1 = new javax.swing.JPanel();
+        ocupacionP2 = new javax.swing.JPanel();
+        ocupacionP4 = new javax.swing.JPanel();
+        ocupacionP5 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        inputAerovMB = new javax.swing.JTextField();
+        inputAerovBM = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
@@ -275,17 +372,24 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jLabel34 = new javax.swing.JLabel();
         pista2B = new javax.swing.JTextField();
         pista4B = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel35 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
-        inputAerovMB = new javax.swing.JTextField();
-        inputAerovBM = new javax.swing.JTextField();
+        ocupacionP9 = new javax.swing.JPanel();
+        ocupacionP7 = new javax.swing.JPanel();
+        ocupacionP8 = new javax.swing.JPanel();
+        ocupacionP11 = new javax.swing.JPanel();
+        ocupacionP10 = new javax.swing.JPanel();
+        bPausar = new javax.swing.JToggleButton();
+        bEstadisticas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AEROPUERTO MADRID", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ocupacionP3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP3.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP3.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(ocupacionP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 20, 20));
 
         jLabel1.setText("Bus a aeropuerto:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
@@ -357,9 +461,60 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel2.add(pista2M, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
         jPanel2.add(pista4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
-        jButton1.setText("Pausar");
+        ocupacionP1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP1.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP1.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(ocupacionP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 20, 20));
 
-        jButton2.setText("Reanudar");
+        ocupacionP2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP2.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP2.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(ocupacionP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 20, 20));
+
+        ocupacionP4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP4.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP4.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(ocupacionP4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));
+
+        ocupacionP5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP5.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP5.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(ocupacionP5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 20, 20));
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aerovías", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
+
+        jLabel35.setText("Madrid - Barcelona: ");
+
+        jLabel36.setText("Barcelona - Madrid: ");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel35)
+                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel36)
+                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AEROPUERTO BARCELONA", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -434,75 +589,80 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel4.add(pista2B, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 430, 110, -1));
         jPanel4.add(pista4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 110, -1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aerovías", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
+        ocupacionP9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP9.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP9.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(ocupacionP9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 20, 20));
 
-        jLabel35.setText("Madrid - Barcelona: ");
+        ocupacionP7.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP7.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP7.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(ocupacionP7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 20, 20));
 
-        jLabel36.setText("Barcelona - Madrid: ");
+        ocupacionP8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP8.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP8.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(ocupacionP8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 20, 20));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel35)
-                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel36)
-                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
-        );
+        ocupacionP11.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP11.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP11.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(ocupacionP11, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 320, 20, 20));
+
+        ocupacionP10.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ocupacionP10.setPreferredSize(new java.awt.Dimension(30, 30));
+        ocupacionP10.setLayout(new java.awt.BorderLayout());
+        jPanel4.add(ocupacionP10, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 20, 20));
+
+        bPausar.setText("Pausar");
+        bPausar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bPausarActionPerformed(evt);
+            }
+        });
+
+        bEstadisticas.setText("👁️  Ver estadísticas");
+        bEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEstadisticasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(bEstadisticas)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bPausar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(380, 380, 380))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12))))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bPausar)
+                    .addComponent(bEstadisticas))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 920, 700));
@@ -510,11 +670,61 @@ public class InterfazSimulador extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bPausarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPausarActionPerformed
+        if(bPausar.isSelected()){
+            bPausar.setText("Reanudar");
+            pausado = true;
+            bEstadisticas.setVisible(pausado);
+        }else{
+            bPausar.setText("Pausar");
+            pausado = false; 
+            bEstadisticas.setVisible(pausado);
+            lPausar.lock();
+            simuladorPausado.signalAll();
+            lPausar.unlock();
+        }
+    }//GEN-LAST:event_bPausarActionPerformed
+
+    public LinkedHashMap datosOcupacion(){
+        LinkedHashMap<String, Integer> datos = new LinkedHashMap<>();
+        datos.put("Actual Madrid", Integer.parseInt(inputPasajerosMadrid.getText()));
+        datos.put("Máx. Madrid",maxPasajerosM);
+        datos.put("Actual Barcelona", Integer.parseInt(inputPasajerosBarcelona.getText()));
+        datos.put("Máx. Barcelona",maxPasajerosB);
+        return datos;
+    }
+    public LinkedHashMap datosDistribucion(){
+        LinkedHashMap<String, Integer> datos = new LinkedHashMap<>();
+        datos.put("Hangar M.", (inputHangarM.getText().isEmpty() ? 0 : inputHangarM.getText().split(",").length));
+        datos.put("Hangar B.", (inputHangarB.getText().isEmpty() ? 0 : inputHangarB.getText().split(",").length));
+        datos.put("Taller M.", (inputTallerM.getText().isEmpty() ? 0 : inputTallerM.getText().split(",").length));
+        datos.put("Taller B.", (inputTallerB.getText().isEmpty() ? 0 : inputTallerB.getText().split(",").length));
+        datos.put("Est. M.", (inputEstacionamientoM.getText().isEmpty() ? 0 : inputEstacionamientoM.getText().split(",").length));
+        datos.put("Est. B.", (inputEstacionamientoB.getText().isEmpty() ? 0 : inputEstacionamientoB.getText().split(",").length));
+        datos.put("Rodaje M.", (inputRodajeM.getText().isEmpty() ? 0 : inputRodajeM.getText().split(",").length));
+        datos.put("Rodaje B.", (inputRodajeB.getText().isEmpty() ? 0 : inputRodajeB.getText().split(",").length));
+        return datos;
+    }
+    private void bEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEstadisticasActionPerformed
+        EstadisticasActuales estadisticas = new EstadisticasActuales(this);
+        estadisticas.setVisible(true);
+    }//GEN-LAST:event_bEstadisticasActionPerformed
+    public void pausar() throws InterruptedException{
+        lPausar.lock();
+        try{
+            if(pausado){
+                simuladorPausado.await();}
+        }finally{
+            lPausar.unlock();
+        }
+    }
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bEstadisticas;
+    private javax.swing.JToggleButton bPausar;
     private javax.swing.JTextField inputAerovBM;
     private javax.swing.JTextField inputAerovMB;
     private javax.swing.JTextField inputBusAeroB;
@@ -531,8 +741,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputRodajeM;
     private javax.swing.JTextField inputTallerB;
     private javax.swing.JTextField inputTallerM;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -573,6 +781,16 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel ocupacionP1;
+    private javax.swing.JPanel ocupacionP10;
+    private javax.swing.JPanel ocupacionP11;
+    private javax.swing.JPanel ocupacionP2;
+    private javax.swing.JPanel ocupacionP3;
+    private javax.swing.JPanel ocupacionP4;
+    private javax.swing.JPanel ocupacionP5;
+    private javax.swing.JPanel ocupacionP7;
+    private javax.swing.JPanel ocupacionP8;
+    private javax.swing.JPanel ocupacionP9;
     private javax.swing.JTextField pista1B;
     private javax.swing.JTextField pista1M;
     private javax.swing.JTextField pista2B;
