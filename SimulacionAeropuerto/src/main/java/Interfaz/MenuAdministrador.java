@@ -4,6 +4,7 @@
  */
 package Interfaz;
 
+import ClasesLogicas.Cliente;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 
 /**
@@ -447,6 +449,13 @@ public class MenuAdministrador extends javax.swing.JFrame {
             b.setText("Cerrar");
         }
     }
+    
+    public void modPasajerosM(String n){
+        inputPasajerosM.setText(n);
+    }
+    public void modPasajerosB(String n){
+        inputPasajerosB.setText(n);
+    }
     /**
      * @param args the command line arguments
      */
@@ -475,14 +484,17 @@ public class MenuAdministrador extends javax.swing.JFrame {
         //</editor-fold>
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuAdministrador().setVisible(true);
+                MenuAdministrador m = new MenuAdministrador();
+                m.setVisible(true);
                 try {
                     cliente = new Socket(InetAddress.getLocalHost(),5000);
                     entrada = new DataInputStream(cliente.getInputStream());
                     salida = new DataOutputStream(cliente.getOutputStream());
-                    cliente.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+                    Thread c = new Thread(new Cliente(entrada, salida,m));
+                    c.start();
+                }catch (IOException ex) {
+                    JOptionPane.showMessageDialog(m, "El servidor no esta activo, se procederá a cerrar el cliente... ");
+                    System.exit(0);
                 }
             }
         });
