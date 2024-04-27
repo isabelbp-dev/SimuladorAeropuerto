@@ -20,7 +20,11 @@ public class Avion implements Runnable{
     private Aeropuerto aero;
     private int numVuelos;
     
-    //Constructor
+    /**
+     * Constructor de la clase avión
+     * @param cod: Número del avión
+     * @param aeropuerto: Aeropuerto al que pertenece el avión
+     */
     public Avion(String cod, Aeropuerto aeropuerto){
         aero = aeropuerto;
         this.capacidad = (int) ((Math.random()*200)+100);
@@ -31,22 +35,37 @@ public class Avion implements Runnable{
         this.numVuelos = 0;
         logger.registrarEvento("Avion " + id + " es creado. ");
     }
-    
-    //Métodos getter y setter
+    /**
+     * Método que devuelve el identificador del avión
+     * @return String: Devuelve el Id del avión
+     */
     public String getId(){
         return id;
     }
+    /**
+     * Método que devuelve la ocupación actual del avión
+     * @return int: Número de pasajeros que hay en el avión
+     */
     public int getOcupacion(){
         return ocupacion;
     }
+    /**
+     * Método que devuelve la capacidad máxima del avión
+     * @return int: Número de pasajeros máximo del avión
+     */
     public int getCapacidad(){
         return capacidad;
     }
+    /**
+     * Método que modifica el aeropuerto al que esta asociado el avión
+     * @param a: Aeropuerto al que queremos asociar el avión
+     */
     public void setAeropuerto(Aeropuerto a){
         this.aero = a;
     }
-    
-    //Salida del avion
+    /**
+     * Método que simula la salida del avión, desde que llega al área de estacionamiento hasta que sale de la pista de despegue
+     */
     public void salidaAvion() throws InterruptedException{
         aero.llegadaEstacionamiento(id);//Llegamos estacionamiento
         logger.registrarEvento("Avion " + id + " ha llegado al area de estacionamiento. ");
@@ -74,7 +93,9 @@ public class Avion implements Runnable{
         Thread.sleep(1000+(int)(Math.random()*4000));//Realizamos comprobaciones
         aero.solPistaDespegue(id, ocupacion);
     }
-    //Llegada del avion
+    /**
+     * Método que simula la llegada del avión al aeropuerto, desde la solicitud de la pista de aterrizaje hasta el desembarque de los pasajeros
+     */
     public void llegadaAvion() throws InterruptedException{
         aero.solPistaAterrizaje(this);//Solicitan pista de aterrizaje
         aero.llegadaRodaje(id);//Después de aterrizar, van al área de rodaje y esperan a una puerta de desembarque
@@ -91,7 +112,9 @@ public class Avion implements Runnable{
         logger.registrarEvento("Avión " + id + " llega al área de estacionamiento tras desembarcar a los pasajeros. ");
         Thread.sleep(1000+(int)(Math.random()*4000));//realizamos comprobaciones 
     }
-    //Ciclo de vida del avión
+    /**
+     * Ciclo de vida del avión
+     */
     public void run() {
         while(true){
             try {

@@ -4,11 +4,19 @@ import ClasesLogicas.Avion;
 import ClasesLogicas.GeneradorAutobus;
 import ClasesLogicas.GeneradorAviones;
 import ClasesLogicas.RegistroLog;
+import ClasesLogicas.Servidor;
 import Renders.CircularProgressBar;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
@@ -80,6 +88,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, this));
         gBuses.start();
         gAviones.start();
+        Servidor s = new Servidor(this);
     }
     
     //Ciclo de vida
