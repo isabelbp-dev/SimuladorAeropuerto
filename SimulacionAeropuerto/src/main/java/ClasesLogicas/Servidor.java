@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ClasesLogicas;
 
 import Interfaz.InterfazSimulador;
@@ -10,17 +6,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-/**
- *
- * @author isaba
- */
-import java.io.*;
-import java.net.*;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Clase servidor del programa, empleada para la programación distribuida del mismo
+ * @author Isabel Barquilla 
+ */
 public class Servidor implements Runnable{
     private InterfazSimulador simulador; 
     private ServerSocket servidor; 
@@ -28,16 +20,20 @@ public class Servidor implements Runnable{
     private DataOutputStream salida;
     private DataInputStream entrada; 
 
+    /**
+     * Constructor del servidor
+     * @param s: Clase simulador del programa
+     */
     public Servidor(InterfazSimulador s){
-        this.simulador = s; 
-    }
+        this.simulador = s;}
     
+    /**
+     * Ciclo de vida del servidor
+     */
     @Override
     public void run() {
     try {
         servidor = new ServerSocket(5000);
-        System.out.println("Servidor iniciado y escuchando en el puerto 5000");
-
         while (true) {
             Socket conexion = null;
             DataInputStream entrada = null;
@@ -48,7 +44,7 @@ public class Servidor implements Runnable{
                 entrada = new DataInputStream(conexion.getInputStream());
                 salida = new DataOutputStream(conexion.getOutputStream());
                 String datos;
-                while (true) {  // Cambiado para asegurarse de que el bucle sólo termina por una excepción
+                while (true) {
                     datos = simulador.getPasajerosM() + ";" + simulador.getPasajerosB() +";"
                             + simulador.getHangarM().size() + ";" + simulador.getHangarB().size() + ";" 
                             + simulador.getTallerM().size() + ";" + simulador.getTallerB().size() + ";"
@@ -71,19 +67,12 @@ public class Servidor implements Runnable{
                 System.out.println("Cliente desconectado o error en la conexión: " + e.getMessage());
             } catch (InterruptedException ex) {
                 Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, "Error en el hilo del servidor", ex);
-                break; // Salir del bucle si el servidor necesita detenerse completamente
+                break;
             } finally {
-                if (conexion != null) {
-                    try { conexion.close(); } catch (IOException e) { /* Ignorar */ }
-                }
-                if (entrada != null) {
-                    try { entrada.close(); } catch (IOException e) { /* Ignorar */ }
-                }
-                if (salida != null) {
-                    try { salida.close(); } catch (IOException e) { /* Ignorar */ }
-                }
-            }
-        }
+                if (conexion != null) {try { conexion.close(); } catch (IOException e) {}}
+                if (entrada != null) {try { entrada.close(); } catch (IOException e) {}}
+                if (salida != null) {try { salida.close(); } catch (IOException e) {}}
+            }}
     } catch (IOException e) {
         System.out.println("Error al inicializar el servidor: " + e.getMessage());
     } finally {
@@ -92,7 +81,5 @@ public class Servidor implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-}
-}
+}}}
 

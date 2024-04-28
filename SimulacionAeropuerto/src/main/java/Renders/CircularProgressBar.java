@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
+ * Clase que dibuja un gráfico circular
  * @author Isabel Barquilla
  */
 
@@ -11,12 +11,19 @@ public class CircularProgressBar extends JPanel {
     private int progress; // Progreso de la barra (0-100)
     private Color progressColor; // Color de la barra de progreso
 
+    /**
+     * Constructor de la clase
+     */
     public CircularProgressBar() {
         this.progress = 0;
         this.progressColor = Color.black;
         setPreferredSize(new Dimension(20, 20)); // Tamaño aproximado de 20x20
     }
 
+    /**
+     * Método para modificar el progreso o ocupación que representa el gráfico
+     * @param progress: Porcentaje que quiero representar
+     */
     public void setProgress(int progress) {
         if (progress >= 0 && progress <= 100) {
             this.progress = progress;
@@ -26,6 +33,10 @@ public class CircularProgressBar extends JPanel {
         }
     }
 
+    /**
+     * Método que dibuja el gráfico
+     * @param g: Gráfico que quiero dibujar
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -45,6 +56,10 @@ public class CircularProgressBar extends JPanel {
         g2d.dispose();
     }
 
+    /**
+     * Método que cambiar el color del gráfico
+     * @param color: Color que quiero aplicar
+     */
     public void setProgressColor(Color color) {
         this.progressColor = color;
         repaint(); // Vuelve a dibujar la barra de progreso con el nuevo color

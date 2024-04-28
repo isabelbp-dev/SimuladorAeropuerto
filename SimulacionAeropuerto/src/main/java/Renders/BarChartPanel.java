@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.Map;
 
 /**
- *
+ * Clase que representa gráficos de barras
  * @author Isabel Barquilla
  */
 
@@ -12,17 +12,29 @@ public class BarChartPanel extends JPanel {
     private Map<String, Integer> valores;
     private int valorMaximo;
 
+    /**
+     * Constructor
+     * @param valores: Conjunto de valores que quiero representar 
+     */
     public BarChartPanel(Map<String, Integer> valores) {
         this.valores = valores;
         this.valorMaximo = valores.values().stream().max(Integer::compareTo).orElse(0);
     }
 
+    /**
+     * Método que dibuja los componentes del gráfico
+     * @param g: Gráfico que quiero dibujar
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         dibujarGraficoDeBarras(g);
     }
 
+    /**
+     * Método que dibuja el gráfico de barras
+     * @param g: Gráfico que quiero dibujar
+     */
     private void dibujarGraficoDeBarras(Graphics g) {
         int ancho = getWidth();
         int alto = getHeight();
@@ -50,8 +62,4 @@ public class BarChartPanel extends JPanel {
             posX += anchoBarra + margen;
         }
     }
-
-//    private Color obtenerColorBarra() {
-//        return new Color((int)(Math.random() * 0x1000000));
-//    }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ClasesLogicas;
 
 import Interfaz.MenuAdministrador;
@@ -13,19 +9,27 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author isaba
+ * Lector de datos usado por el cliente para actualizar los datos proporcionados por el servidor
+ * @author Isabel Barquilla Poyato
  */
 public class LectorDatos implements Runnable{
     private static DataInputStream entrada;
     private static DataOutputStream salida; 
     private static MenuAdministrador menu;
     
-    public LectorDatos(DataInputStream e, DataOutputStream s, MenuAdministrador m){
+    /**
+     * Constructor del lector de datos
+     * @param e: DataInputStream usado para la lectura de los datos proporcionados por el servidor
+     * @param m: Menú del cliente
+     */
+    public LectorDatos(DataInputStream e, MenuAdministrador m){
         this.entrada = e;
-        this.salida = s;
         this.menu = m;
     }
+    
+    /**
+    * Ciclo de vida del lector
+    */
     @Override
     public void run() {
         while(true){

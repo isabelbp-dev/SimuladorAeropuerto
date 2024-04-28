@@ -9,13 +9,13 @@ import java.util.Random;
 public class Autobus implements Runnable{
     RegistroLog logger = RegistroLog.getInstance();
     Random random = new Random();
+    
     //Atributos 
     private String id;
     private int ocupacion;
     private Aeropuerto aero;
     private InterfazSimulador simulador;
     
-    //Constructor
     /**
      * Constructor de la clase Autobús
      * @param cod: Codigo usado para la creación del ID del bús, correspondiente al número de bus creado

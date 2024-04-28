@@ -14,7 +14,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Aeropuerto {
     RegistroLog logger = RegistroLog.getInstance();
-    
     //Atributos
     private String nombre;
     private int ocupacion;
@@ -245,6 +244,7 @@ public class Aeropuerto {
     }
     
     //Operaciones relacionadas con las pistas de despegue y aterrizaje
+    //Gestiones internas de las pistas 
     /**
      * Método que sirve para solicitar una pista de despegue para un avión
      * @param id: Id del avión que solicita la puerta de despegue
@@ -260,7 +260,7 @@ public class Aeropuerto {
         logger.registrarEvento("Avión " + id + " (" + pasajeros + " pasajeros) accede a pista " + pista + " para despegue. ");
         Thread.sleep(1000+(int)(Math.random()*2000));
         liberarPista(pista);
-        semPistas.release();
+        //semPistas.release();
     }
     /**
      * Método que sirve para solicitar una pista de aterrizaje para un avión
@@ -268,12 +268,14 @@ public class Aeropuerto {
      */
     public void solPistaAterrizaje(Avion a) throws InterruptedException{
         boolean encontrada;
+        lPistas.lock();
         encontrada = semPistas.tryAcquire();
         while(!encontrada){
+            lPistas.unlock();
             Thread.sleep(1000+(int)(Math.random()*4000));
+            lPistas.lock();
             encontrada = semPistas.tryAcquire();
         }
-        lPistas.lock();
         simulador.pausar();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, a.getId());
@@ -303,7 +305,7 @@ public class Aeropuerto {
     public void liberarPista(int pista) throws InterruptedException{
         lPistas.lock();
         simulador.pausar();
-        if(pistas.get(pista) != "Cerrada"){
+        if(!"Cerrada".equals(pistas.get(pista))){
             pistas.set(pista, null);
             semPistas.release();
         }
@@ -323,6 +325,43 @@ public class Aeropuerto {
         }
     }
 
+    //Solicitudes de apertura o cierre de pistas por parte del cliente
+    /**
+     * Método que cierra una pista de despegue/aterrizaje
+     * @param pista: Número de la pista a cerrar
+     */
+    public void cerrarPista(int pista) throws InterruptedException{
+        lPistas.lock();
+        System.out.println("Permisos antes del cierre de la pista: " + semPistas.availablePermits());
+        if(pistas.get(pista-1)== null){
+            semPistas.acquire();
+        }
+        pistas.set(pista-1, "Cerrada");
+        System.out.println("Permisos tras el cierre de la pista: " + semPistas.availablePermits());
+        System.out.println(pistas.toString());
+        lPistas.unlock();
+    }
+    /**
+     * Método que abre una pista de despegue/aterrizaje
+     * @param pista: Número de la pista a abrir
+     */
+    public void abrirPista(int pista){
+        lPistas.lock();
+        pistas.set(pista-1, null);
+        if(nombre == "Madrid"){
+            if(simulador.consultarPistaM(pista-1)){
+                semPistas.release();
+            }
+        }else{
+            if(simulador.consultarPistaB(pista-1)){
+                semPistas.release();
+            }
+        }
+        System.out.println("Permisos tras la abertura de la pista: " + semPistas.availablePermits());
+        System.out.println(pistas.toString());
+        lPistas.unlock();
+    }
+    
     //Llegada y salida de aviones al hangar
     /**
      * Método que sirve para indicar la llegada de un nuevo avión al hangar
@@ -491,29 +530,5 @@ public class Aeropuerto {
         }else{
             simulador.usoAeroviaBM(a);
         }
-    }
-    
-    public void cerrarPista(int pista) throws InterruptedException{
-        lPistas.lock();
-        if(pistas.get(pista-1)== null){
-            semPistas.acquire();
-        }
-        pistas.set(pista-1, "Cerrada");
-        lPistas.unlock();
-    }
-    
-    public void abrirPista(int pista){
-        lPistas.lock();
-        pistas.set(pista-1, null);
-        if(nombre == "Madrid"){
-            if(simulador.consultarPistaM(pista-1)){
-                semPistas.release();
-            }
-        }else{
-            if(simulador.consultarPistaB(pista-1)){
-                semPistas.release();
-            }
-        }
-        lPistas.unlock();
     }
 }

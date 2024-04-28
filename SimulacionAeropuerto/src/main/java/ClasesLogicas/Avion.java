@@ -35,6 +35,8 @@ public class Avion implements Runnable{
         this.numVuelos = 0;
         logger.registrarEvento("Avion " + id + " es creado. ");
     }
+    
+    //Métodos getter y setter
     /**
      * Método que devuelve el identificador del avión
      * @return String: Devuelve el Id del avión
@@ -63,6 +65,8 @@ public class Avion implements Runnable{
     public void setAeropuerto(Aeropuerto a){
         this.aero = a;
     }
+    
+    //Métodos propios del avión
     /**
      * Método que simula la salida del avión, desde que llega al área de estacionamiento hasta que sale de la pista de despegue
      */
