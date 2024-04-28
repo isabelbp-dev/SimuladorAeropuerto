@@ -4,7 +4,7 @@
  */
 package Interfaz;
 
-import ClasesLogicas.Cliente;
+import ClasesLogicas.LectorDatos;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -83,8 +83,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
+        inputAerovMB = new javax.swing.JTextField();
+        inputAerovBM = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -360,11 +360,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -373,11 +373,11 @@ public class MenuAdministrador extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22))
         );
 
@@ -411,42 +411,83 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bPista1MActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista1MActionPerformed
-        modBotonPista(bPista1M);
+        try {
+            modBotonPista(bPista1M,1);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista1MActionPerformed
 
     private void bPista2MActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista2MActionPerformed
-        modBotonPista(bPista2M);
+        try {
+            modBotonPista(bPista2M,2);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista2MActionPerformed
 
     private void bPista3MActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista3MActionPerformed
-        modBotonPista(bPista3M);
+        try {
+            modBotonPista(bPista3M,3);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista3MActionPerformed
 
     private void bPista4MActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista4MActionPerformed
-        modBotonPista(bPista4M);
+        try {
+            modBotonPista(bPista4M,4);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista4MActionPerformed
 
     private void bPista1BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista1BActionPerformed
-        modBotonPista(bPista1B);
+        try {
+            modBotonPista(bPista1B,5);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista1BActionPerformed
 
     private void bPista3BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista3BActionPerformed
-        modBotonPista(bPista3B);
+        try {
+            modBotonPista(bPista3B,6);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista3BActionPerformed
 
     private void bPista2BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista2BActionPerformed
-        modBotonPista(bPista2B);
+        try {
+            modBotonPista(bPista2B,7);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista2BActionPerformed
 
     private void bPista4BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPista4BActionPerformed
-        modBotonPista(bPista4B);
+        try {
+            modBotonPista(bPista4B,8);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuAdministrador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_bPista4BActionPerformed
 
-    public void modBotonPista(JToggleButton b){
+    public void cerrarPista(int pista) throws IOException{
+        salida.writeUTF("Cerrar;" + String.valueOf(pista));
+    }
+    
+    public void abrirPista(int pista) throws IOException{
+        salida.writeUTF("Abrir;" + String.valueOf(pista));
+    }
+    public void modBotonPista(JToggleButton b, int n) throws IOException{
         if(b.isSelected()){
             b.setText("Abrir");
+            cerrarPista(n);
         }else{
             b.setText("Cerrar");
+            abrirPista(n);
         }
     }
     
@@ -455,6 +496,36 @@ public class MenuAdministrador extends javax.swing.JFrame {
     }
     public void modPasajerosB(String n){
         inputPasajerosB.setText(n);
+    }
+    public void modHangarM(String n){
+        inputHangarM.setText(n);
+    }
+    public void modHangarB(String n){
+        inputHangarB.setText(n);
+    }
+    public void modTallerM(String n){
+        inputTallerM.setText(n);
+    }
+    public void modTallerB(String n){
+        inputTallerB.setText(n);
+    }
+    public void modEstacionamientoM(String n){
+        inputEstacionamientoM.setText(n);
+    }
+    public void modEstacionamientoB(String n){
+        inputEstacionamientoB.setText(n);
+    }
+    public void modRodajeM(String n){
+        inputRodajeM.setText(n);
+    }
+    public void modRodajeB(String n){
+        inputRodajeB.setText(n);
+    }
+    public void modAerovMB(String aero){
+        inputAerovMB.setText(aero);
+    }
+    public void modAerovBM(String aero){
+        inputAerovBM.setText(aero);
     }
     /**
      * @param args the command line arguments
@@ -490,7 +561,7 @@ public class MenuAdministrador extends javax.swing.JFrame {
                     cliente = new Socket(InetAddress.getLocalHost(),5000);
                     entrada = new DataInputStream(cliente.getInputStream());
                     salida = new DataOutputStream(cliente.getOutputStream());
-                    Thread c = new Thread(new Cliente(entrada, salida,m));
+                    Thread c = new Thread(new LectorDatos(entrada, salida,m));
                     c.start();
                 }catch (IOException ex) {
                     JOptionPane.showMessageDialog(m, "El servidor no esta activo, se procederá a cerrar el cliente... ");
@@ -511,6 +582,8 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JToggleButton bPista3M;
     private javax.swing.JToggleButton bPista4B;
     private javax.swing.JToggleButton bPista4M;
+    private javax.swing.JTextField inputAerovBM;
+    private javax.swing.JTextField inputAerovMB;
     private javax.swing.JTextField inputEstacionamientoB;
     private javax.swing.JTextField inputEstacionamientoM;
     private javax.swing.JTextField inputHangarB;
@@ -542,7 +615,5 @@ public class MenuAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     // End of variables declaration//GEN-END:variables
 }

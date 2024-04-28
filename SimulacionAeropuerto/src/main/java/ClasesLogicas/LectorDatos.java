@@ -16,12 +16,12 @@ import javax.swing.JOptionPane;
  *
  * @author isaba
  */
-public class Cliente implements Runnable{
+public class LectorDatos implements Runnable{
     private static DataInputStream entrada;
     private static DataOutputStream salida; 
     private static MenuAdministrador menu;
     
-    public Cliente(DataInputStream e, DataOutputStream s, MenuAdministrador m){
+    public LectorDatos(DataInputStream e, DataOutputStream s, MenuAdministrador m){
         this.entrada = e;
         this.salida = s;
         this.menu = m;
@@ -32,9 +32,18 @@ public class Cliente implements Runnable{
             try{
                 String mensaje = entrada.readUTF();
                 String[] datos = mensaje.split(";");
-                System.out.println(datos.length);
                 menu.modPasajerosM(datos[0]);
                 menu.modPasajerosB(datos[1]);
+                menu.modHangarM(datos[2]);
+                menu.modHangarB(datos[3]);
+                menu.modTallerM(datos[4]);
+                menu.modTallerB(datos[5]);
+                menu.modEstacionamientoM(datos[6]);
+                menu.modEstacionamientoB(datos[7]);
+                menu.modRodajeM(datos[8]);
+                menu.modRodajeB(datos[9]);
+                menu.modAerovMB(datos[10]);
+                menu.modAerovBM(datos[11]);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(menu, "El servidor no esta activo, se procederá a cerrar el cliente... ");
                 System.exit(0);

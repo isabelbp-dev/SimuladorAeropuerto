@@ -40,7 +40,6 @@ public class BarChartPanel extends JPanel {
 
             g.setColor(Color.darkGray);
             g.fillRect(posX, posY, anchoBarra, alturaBarra);
-
             g.setColor(Color.BLACK);
             String etiqueta = entrada.getKey();
             g.drawString(etiqueta, posX + (anchoBarra / 2) - g.getFontMetrics().stringWidth(etiqueta) / 2, alto - margen + 20);

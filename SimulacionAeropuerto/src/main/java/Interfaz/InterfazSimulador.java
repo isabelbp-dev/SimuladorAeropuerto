@@ -103,6 +103,36 @@ public class InterfazSimulador extends javax.swing.JFrame {
     public String getPasajerosB(){
         return inputPasajerosBarcelona.getText();
     }    
+    public HashSet getHangarM(){
+        return aeroMadrid.getHangar();
+    }
+    public HashSet getHangarB(){
+        return aeroBarcelona.getHangar();
+    }
+    public HashSet getTallerM(){
+        return aeroMadrid.getTaller();
+    }
+    public HashSet getTallerB(){
+        return aeroBarcelona.getTaller();
+    }
+    public HashSet getEstacionamientoM(){
+        return aeroMadrid.getEstacionamiento();
+    }
+    public HashSet getEstacionamientoB(){
+        return aeroBarcelona.getEstacionamiento();
+    }
+    public HashSet getRodajeM(){
+        return aeroMadrid.getRodaje();
+    }
+    public HashSet getRodajeB(){
+        return aeroBarcelona.getRodaje();
+    }
+    public String getAeroviaMB(){
+        return inputAerovMB.getText();
+    }
+    public String getAeroviaBM(){
+        return inputAerovBM.getText();
+    }
     //Ciclo de vida
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -717,6 +747,27 @@ public class InterfazSimulador extends javax.swing.JFrame {
         }finally{
             lPausar.unlock();
         }
+    }
+    
+    public void cerrarPista(int pista) throws InterruptedException{
+        if(pista <= 3){
+            aeroMadrid.cerrarPista(pista);
+        }else{
+            aeroBarcelona.cerrarPista(pista - 4);
+        }
+    }
+    public void abrirPista(int pista){
+        if(pista <= 3){
+            aeroMadrid.abrirPista(pista);
+        }else{
+            aeroBarcelona.abrirPista(pista);
+        }
+    }
+    public boolean consultarPistaM(int pista){
+        return pistasM[pista].getText().isEmpty();
+    }
+    public boolean consultarPistaB(int pista){
+        return pistasB[pista].getText().isEmpty();
     }
     /**
      * @param args the command line arguments

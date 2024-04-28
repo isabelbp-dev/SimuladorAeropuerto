@@ -47,12 +47,25 @@ public class Servidor implements Runnable{
                 conexion = servidor.accept(); // Aceptar conexiones entrantes
                 entrada = new DataInputStream(conexion.getInputStream());
                 salida = new DataOutputStream(conexion.getOutputStream());
-
                 String datos;
                 while (true) {  // Cambiado para asegurarse de que el bucle sólo termina por una excepción
-                    datos = simulador.getPasajerosM() + ";" + simulador.getPasajerosB();
+                    datos = simulador.getPasajerosM() + ";" + simulador.getPasajerosB() +";"
+                            + simulador.getHangarM().size() + ";" + simulador.getHangarB().size() + ";" 
+                            + simulador.getTallerM().size() + ";" + simulador.getTallerB().size() + ";"
+                            + simulador.getEstacionamientoM().size() + ";" + simulador.getEstacionamientoB().size() + ";"
+                            + simulador.getRodajeM().size() + ";" + simulador.getRodajeB().size() + ";"
+                            + simulador.getAeroviaMB() + " ;" + simulador.getAeroviaBM() +" ";
                     salida.writeUTF(datos);
-                    Thread.sleep(20);
+                    Thread.sleep(30);
+                    if(entrada.available()>0){
+                        String mensaje = entrada.readUTF();
+                        int pista = Integer.parseInt(mensaje.split(";")[1]);
+                        if("Cerrar".equals(mensaje.split(";")[0])){
+                            simulador.cerrarPista(pista);
+                        }else{
+                            simulador.abrirPista(pista);
+                        }
+                    }
                 }
             } catch (IOException e) {
                 System.out.println("Cliente desconectado o error en la conexión: " + e.getMessage());
@@ -81,38 +94,5 @@ public class Servidor implements Runnable{
         }
     }
 }
-
-//    public void run() {
-//        try {
-//            servidor = new ServerSocket(5000);
-//            while (true) {
-//                conexion = servidor.accept(); // Aceptar conexiones entrantes
-//                entrada = new DataInputStream(conexion.getInputStream());
-//                salida = new DataOutputStream(conexion.getOutputStream());
-//                try{
-//                    while(!conexion.isClosed()){
-//                        String datos = "";
-//                        datos += simulador.getPasajerosM();
-//                        datos += (";" + simulador.getPasajerosB());
-//                        salida.writeUTF(datos);
-//                        Thread.sleep(20);
-//                    }
-//                }finally{
-//                    System.out.println("El cliente ha cerrado la conexión");
-//                    conexion.close();
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Ha fallado la inicialización del servidor: " + e.getMessage());
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-//        } finally {
-//            try {
-//                if (servidor != null) servidor.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
 

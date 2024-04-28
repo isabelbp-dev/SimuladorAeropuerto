@@ -253,6 +253,7 @@ public class Aeropuerto {
     public void solPistaDespegue(String id, int pasajeros) throws InterruptedException{
         semPistas.acquire();
         simulador.pausar();
+        lPistas.lock();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, id);
         salidaRodaje(id);
@@ -272,6 +273,7 @@ public class Aeropuerto {
             Thread.sleep(1000+(int)(Math.random()*4000));
             encontrada = semPistas.tryAcquire();
         }
+        lPistas.lock();
         simulador.pausar();
         int pista = pistas.indexOf(null);
         ocuparPista(pista, a.getId());
@@ -283,7 +285,6 @@ public class Aeropuerto {
         }
         Thread.sleep(1000+(int)(Math.random()*4000));
         liberarPista(pista);
-        semPistas.release();
     }
     /**
      * Método que sirve para ocupar una pista una vez esta ha sido asignada
@@ -291,7 +292,6 @@ public class Aeropuerto {
      * @param id: Id del avión que va a ocupar la pista
      */
     public void ocuparPista(int pista, String id) throws InterruptedException{
-        lPistas.lock();
         pistas.set(pista, id);
         actualizarPistas(pista, id);
         lPistas.unlock();
@@ -303,7 +303,10 @@ public class Aeropuerto {
     public void liberarPista(int pista) throws InterruptedException{
         lPistas.lock();
         simulador.pausar();
-        pistas.set(pista, null);
+        if(pistas.get(pista) != "Cerrada"){
+            pistas.set(pista, null);
+            semPistas.release();
+        }
         actualizarPistas(pista, null);
         lPistas.unlock();
     }
@@ -488,5 +491,29 @@ public class Aeropuerto {
         }else{
             simulador.usoAeroviaBM(a);
         }
+    }
+    
+    public void cerrarPista(int pista) throws InterruptedException{
+        lPistas.lock();
+        if(pistas.get(pista-1)== null){
+            semPistas.acquire();
+        }
+        pistas.set(pista-1, "Cerrada");
+        lPistas.unlock();
+    }
+    
+    public void abrirPista(int pista){
+        lPistas.lock();
+        pistas.set(pista-1, null);
+        if(nombre == "Madrid"){
+            if(simulador.consultarPistaM(pista-1)){
+                semPistas.release();
+            }
+        }else{
+            if(simulador.consultarPistaB(pista-1)){
+                semPistas.release();
+            }
+        }
+        lPistas.unlock();
     }
 }
