@@ -2,19 +2,15 @@ package ClasesLogicas;
 
 import Interfaz.MenuAdministrador;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  * Lector de datos usado por el cliente para actualizar los datos proporcionados por el servidor
- * @author Isabel Barquilla Poyato
+ * @author Isabel Barquilla Poyato y Sandra Familiar
  */
 public class LectorDatos implements Runnable{
     private static DataInputStream entrada;
-    private static DataOutputStream salida; 
     private static MenuAdministrador menu;
     
     /**

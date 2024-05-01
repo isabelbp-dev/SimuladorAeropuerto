@@ -11,10 +11,10 @@ import java.util.logging.Logger;
 
 /**
  * Clase servidor del programa, empleada para la programación distribuida del mismo
- * @author Isabel Barquilla 
+ * @author Isabel Barquilla y Sandra Familiar
  */
 public class Servidor implements Runnable{
-    private InterfazSimulador simulador; 
+    private final InterfazSimulador simulador; 
     private ServerSocket servidor; 
     private Socket conexion;
     private DataOutputStream salida;
@@ -35,9 +35,9 @@ public class Servidor implements Runnable{
     try {
         servidor = new ServerSocket(5000);
         while (true) {
-            Socket conexion = null;
-            DataInputStream entrada = null;
-            DataOutputStream salida = null;
+            conexion = null;
+            entrada = null;
+            salida = null;
 
             try {
                 conexion = servidor.accept(); // Aceptar conexiones entrantes
@@ -78,8 +78,6 @@ public class Servidor implements Runnable{
     } finally {
         try {
             if (servidor != null) servidor.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
 }}}
 

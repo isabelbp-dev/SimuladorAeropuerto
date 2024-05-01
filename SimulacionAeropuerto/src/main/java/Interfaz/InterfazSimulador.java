@@ -6,6 +6,7 @@ import ClasesLogicas.GeneradorAviones;
 import ClasesLogicas.RegistroLog;
 import ClasesLogicas.Servidor;
 import Renders.CircularProgressBar;
+import java.awt.Color;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.*;
@@ -14,7 +15,7 @@ import javax.swing.JTextField;
 
 /**
  * Interfaz y clase principal del programa
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class InterfazSimulador extends javax.swing.JFrame {
@@ -23,7 +24,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private int maxPasajerosB = 0; 
     
     //Atributos
-    private final Lock modBus1 = new ReentrantLock();
     private final CircularProgressBar[] graficosM;
     private final CircularProgressBar[] graficosB;
     private final JTextField[] puertasM;
@@ -40,7 +40,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private final Lock lAeroviaMB = new ReentrantLock();
     private final Lock lAeroviaBM = new ReentrantLock();
     private final Lock lPausar = new ReentrantLock();
-    Condition simuladorPausado = lPausar.newCondition();
+    private final Condition simuladorPausado = lPausar.newCondition();
     
     //Servidor
     private final Thread server; 
@@ -70,7 +70,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
         aeroMadrid = aeroM;
         aeroBarcelona = aeroB;
         Thread gAviones = new Thread(new GeneradorAviones(aeroM, aeroB));
-        Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB, this));
+        Thread gBuses = new Thread(new GeneradorAutobus(aeroM, aeroB));
         gBuses.start();
         gAviones.start();
         this.server = new Thread( new Servidor(this));
@@ -153,6 +153,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     
     /**
      * Método main de la clase
+     * @param args
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -165,6 +166,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el número de pasajeros actuales de Madrid
      * @param n: Int con el número de pasajeros actual de Madrid
+     * @throws java.lang.InterruptedException
      */
     public void modPasajerosM(int n) throws InterruptedException{
         pausar();
@@ -175,6 +177,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el número de pasajeros actuales de Barcelona
      * @param n: Int con el número de pasajeros actuales de Barcelona
+     * @throws java.lang.InterruptedException
      */
     public void modPasajerosB(int n) throws InterruptedException{
         pausar();
@@ -187,6 +190,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el bus de salida de la ciudad de Madrid
      * @param Id: Id del bus
+     * @throws java.lang.InterruptedException
      */
     public void modBusCiudadM(String Id) throws InterruptedException{
         pausar();
@@ -194,6 +198,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el bus de salida de la ciudad de Barcelona
      * @param Id: Id del bus
+     * @throws java.lang.InterruptedException
      */
     public void modBusCiudadB(String Id) throws InterruptedException{
         pausar();
@@ -201,6 +206,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el bus de salida del aeropuerto de Madrid
      * @param Id: Id del bus
+     * @throws java.lang.InterruptedException
      */
     public void modAeroM(String Id) throws InterruptedException{
         pausar();
@@ -208,6 +214,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica el bus de salida del aeropuerto de Barcelona
      * @param Id: Id del bus
+     * @throws java.lang.InterruptedException
      */
     public void modAeroB(String Id) throws InterruptedException{
         pausar();
@@ -218,6 +225,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica los aviones que hay en el hangar de Madrid
      * @param hangar: Datos actuales del hangar
+     * @throws java.lang.InterruptedException
      */
     public void modHangarM(HashSet<String> hangar) throws InterruptedException{
         pausar();
@@ -229,6 +237,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que modifica los aviones que hay en el hangar de Barcelona
      * @param hangar: Datos actuales del hangar
+     * @throws java.lang.InterruptedException
      */
     public void modHangarB(HashSet<String> hangar) throws InterruptedException{
         pausar();
@@ -245,6 +254,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
      * @param puerta: Número de la puerta a actualizar
      * @param id: String con el ID del avión que ocupará la puerta (Cadena vacía en caso de liberarse)
      * @return CircularProgressBar: Gráfico asociado a la puerta 
+     * @throws java.lang.InterruptedException 
      */
     public CircularProgressBar modPuertasM(int puerta, String id) throws InterruptedException{  
         pausar();
@@ -256,6 +266,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
      * @param puerta: Número de la puerta a actualizar
      * @param id: String con el ID del avión que ocupará la puerta (Cadena vacía en caso de liberarse)
      * @return CircularProgressBar: Gráfico asociado a la puerta 
+     * @throws java.lang.InterruptedException 
      */
     public CircularProgressBar modPuertasB(int puerta, String id) throws InterruptedException{
         pausar();
@@ -268,6 +279,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
      * Método que actualiza los datos una de las pistas del aeropuerto de Madrid
      * @param pista: Número de la pista a actualizar
      * @param id: Datos actuales de la pista
+     * @throws java.lang.InterruptedException
      */
     public void modPistasM(int pista, String id) throws InterruptedException{
         pausar();
@@ -276,6 +288,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
      * Método que actualiza los datos de una de las pistas del aeropuerto de Barcelona
      * @param pista: Número de la pista a actualizar
      * @param id: Datos actuales de la pista 
+     * @throws java.lang.InterruptedException 
      */
     public void modPistasB(int pista, String id) throws InterruptedException{
         pausar();
@@ -285,33 +298,44 @@ public class InterfazSimulador extends javax.swing.JFrame {
     //Actualizar aerovías
     /**
      * Método que actualiza los datos de la aerovía de Madrid a Barcelona
+     * @throws java.lang.InterruptedException
      */
     public void modAeroviaMB() throws InterruptedException{
         pausar();
         lAeroviaMB.lock();
-        StringJoiner joiner = new StringJoiner(",");
-        for(String avion: aeroviaMB){
-            joiner.add(avion);
+        try {
+            StringJoiner joiner = new StringJoiner(",");
+            for(String avion: aeroviaMB){
+                joiner.add(avion);
+            }
+            inputAerovMB.setText(joiner.toString());
+        } finally {
+            lAeroviaMB.unlock();
         }
-        inputAerovMB.setText(joiner.toString());
-        lAeroviaMB.unlock();}
+}
     /**
      * Método que actualiza los datos de la aerovía de Barcelona a Madrid
+     * @throws java.lang.InterruptedException
      */
     public void modAeroviaBM() throws InterruptedException{
         pausar();
         lAeroviaBM.lock();
-        StringJoiner joiner = new StringJoiner(",");
-        for(String avion: aeroviaBM){
-            joiner.add(avion);
+        try {
+            StringJoiner joiner = new StringJoiner(",");
+            for(String avion: aeroviaBM){
+                joiner.add(avion);
+            }
+            inputAerovBM.setText(joiner.toString());
+        } finally {
+            lAeroviaBM.unlock();
         }
-        inputAerovBM.setText(joiner.toString());
-        lAeroviaBM.unlock();}
+}
     
     //Uso de aerovías
     /**
      * Método que sirve para usar la aerovía de Madrid a Barcelona
      * @param a: Avión que va a volar a través de la aerovía
+     * @throws java.lang.InterruptedException
      */
     public void usoAeroviaMB(Avion a) throws InterruptedException{
         pausar();
@@ -324,6 +348,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para usar la aerovía de Barcelona a Madrid
      * @param a: Avión que va a volar a través de la aerovía
+     * @throws java.lang.InterruptedException
      */
     public void usoAeroviaBM(Avion a)throws InterruptedException{
         pausar();
@@ -336,6 +361,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para salir de la aerovía de Madrid a Barcelona
      * @param a: Avión que va a salir de la aerovía
+     * @throws java.lang.InterruptedException
      */
     public void salirAerovMB(Avion a) throws InterruptedException{
         pausar();
@@ -345,6 +371,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para salir de la aerovía de Barcelona a Madrid
      * @param a: Avión que va a salir de la aerovía
+     * @throws java.lang.InterruptedException
      */
     public void salirAerovBM(Avion a) throws InterruptedException{
         pausar();
@@ -355,6 +382,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del área de rodaje de Madrid
      * @param rodaje: Datos actuales del área de rodaje
+     * @throws java.lang.InterruptedException
      */
     public void modRodajeM(HashSet<String> rodaje) throws InterruptedException{
         pausar();
@@ -367,6 +395,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del área de rodaje de Barcelona
      * @param rodaje: Datos actuales del área de rodaje
+     * @throws java.lang.InterruptedException
      */
     public void modRodajeB(HashSet<String> rodaje) throws InterruptedException{
         StringJoiner joiner = new StringJoiner(",");
@@ -380,6 +409,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del área de estacionamiento de Madrid
      * @param estacionamiento: Datos actuales del área de estacionamiento
+     * @throws java.lang.InterruptedException
      */
     public void modEstacionamientoM(HashSet<String> estacionamiento) throws InterruptedException{
         pausar();
@@ -391,6 +421,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del área de estacionamiento de Barcelona
      * @param estacionamiento: Datos actuales del área de estacionamiento
+     * @throws java.lang.InterruptedException
      */
     public void modEstacionamientoB(HashSet<String> estacionamiento) throws InterruptedException{
         pausar();
@@ -405,6 +436,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del taller de Madrid
      * @param taller: Datos actuales del taller
+     * @throws java.lang.InterruptedException
      */
     public void modTallerM(HashSet<String> taller) throws InterruptedException{
         pausar();
@@ -417,6 +449,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método que sirve para actualizar los datos del taller de Barcelona
      * @param taller: Datos actuales del taller
+     * @throws java.lang.InterruptedException
      */
     public void modTallerB(HashSet<String> taller) throws InterruptedException{
         pausar();
@@ -459,6 +492,7 @@ public class InterfazSimulador extends javax.swing.JFrame {
     //Método para la pausa y reanudación del programa
     /**
      * Método que sirve para pausar la ejecución del programa
+     * @throws java.lang.InterruptedException
      */
     public void pausar() throws InterruptedException{
         lPausar.lock();
@@ -474,24 +508,28 @@ public class InterfazSimulador extends javax.swing.JFrame {
     /**
      * Método para cerrar una pista 
      * @param pista: Int de la pista que se desea cerrar
+     * @throws java.lang.InterruptedException
      */
     public void cerrarPista(int pista) throws InterruptedException{
-        if(pista <= 3){
+        if(pista <= 4){
             aeroMadrid.cerrarPista(pista);
+            pistasM[pista-1].setBackground(Color.LIGHT_GRAY);
         }else{
             aeroBarcelona.cerrarPista(pista - 4);
-        }}
+            pistasB[pista-5].setBackground(Color.LIGHT_GRAY);}
+        }
     /**
      * Método para abrir una pista 
      * @param pista: Int de la pista que se desea abrir
      */
     public void abrirPista(int pista){
-        if(pista <= 3){
+        if(pista <= 4){
             aeroMadrid.abrirPista(pista);
+            pistasM[pista-1].setBackground(Color.WHITE);
         }else{
             aeroBarcelona.abrirPista(pista - 4);
+            pistasB[pista-5].setBackground(Color.WHITE);}
         }
-    }
     /**
      * Método que consulta la ocupación actual de una pista del aeropuerto de Madrid
      * @param pista: Pista a consultar
@@ -516,38 +554,38 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         ocupacionP3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        txtBusM = new javax.swing.JLabel();
+        txtBusMC = new javax.swing.JLabel();
         inputBusMadrid = new javax.swing.JTextField();
         inputBusAeroM = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        txtPasajerosM = new javax.swing.JLabel();
         inputPasajerosMadrid = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        txtRodajeM = new javax.swing.JLabel();
+        txtHangarM = new javax.swing.JLabel();
         inputRodajeM = new javax.swing.JTextField();
         inputHangarM = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        txtTallerM = new javax.swing.JLabel();
         inputTallerM = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        txtEstacionamientoM = new javax.swing.JLabel();
         inputEstacionamientoM = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        txtP2M = new javax.swing.JLabel();
+        txtP3M = new javax.swing.JLabel();
+        txtPista3M = new javax.swing.JLabel();
+        txtP5M = new javax.swing.JLabel();
+        txtP6M = new javax.swing.JLabel();
+        txtPista1M = new javax.swing.JLabel();
         puerta5M = new javax.swing.JTextField();
         puerta2M = new javax.swing.JTextField();
         puerta3M = new javax.swing.JTextField();
         puerta1M = new javax.swing.JTextField();
         puerta6M = new javax.swing.JTextField();
         puerta4M = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
+        txtP1M = new javax.swing.JLabel();
         pista1M = new javax.swing.JTextField();
         pista3M = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
+        txtP4M = new javax.swing.JLabel();
+        txtPista4M = new javax.swing.JLabel();
+        txtPista2M = new javax.swing.JLabel();
         pista2M = new javax.swing.JTextField();
         pista4M = new javax.swing.JTextField();
         ocupacionP1 = new javax.swing.JPanel();
@@ -555,43 +593,43 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP4 = new javax.swing.JPanel();
         ocupacionP5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel35 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
+        txtAeroMB = new javax.swing.JLabel();
+        txtAeroBM = new javax.swing.JLabel();
         inputAerovMB = new javax.swing.JTextField();
         inputAerovBM = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
+        txtBusB = new javax.swing.JLabel();
+        txtBus2B = new javax.swing.JLabel();
         inputBusBarcelona = new javax.swing.JTextField();
         inputBusAeroB = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
+        txtPasajerosB = new javax.swing.JLabel();
         inputPasajerosBarcelona = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
+        txtRodajeB = new javax.swing.JLabel();
+        txtHangarB = new javax.swing.JLabel();
         inputRodajeB = new javax.swing.JTextField();
         inputHangarB = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
+        txtTallerB = new javax.swing.JLabel();
         inputTallerB = new javax.swing.JTextField();
-        jLabel24 = new javax.swing.JLabel();
+        txtEstacionamientoB = new javax.swing.JLabel();
         inputEstacionamientoB = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        jLabel30 = new javax.swing.JLabel();
+        txtP2B = new javax.swing.JLabel();
+        txtP3B = new javax.swing.JLabel();
+        txtPista3B = new javax.swing.JLabel();
+        txtP5B = new javax.swing.JLabel();
+        txtP6B = new javax.swing.JLabel();
+        txtPista1B = new javax.swing.JLabel();
         puerta5B = new javax.swing.JTextField();
         puerta2B = new javax.swing.JTextField();
         puerta3B = new javax.swing.JTextField();
         puerta1B = new javax.swing.JTextField();
         puerta6B = new javax.swing.JTextField();
         puerta4B = new javax.swing.JTextField();
-        jLabel31 = new javax.swing.JLabel();
+        txtP1B = new javax.swing.JLabel();
         pista1B = new javax.swing.JTextField();
         pista3B = new javax.swing.JTextField();
-        jLabel32 = new javax.swing.JLabel();
-        jLabel33 = new javax.swing.JLabel();
-        jLabel34 = new javax.swing.JLabel();
+        txtP4B = new javax.swing.JLabel();
+        txtPista4B = new javax.swing.JLabel();
+        txtPista2b = new javax.swing.JLabel();
         pista2B = new javax.swing.JTextField();
         pista4B = new javax.swing.JTextField();
         ocupacionP9 = new javax.swing.JPanel();
@@ -613,11 +651,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
         ocupacionP3.setLayout(new java.awt.BorderLayout());
         jPanel2.add(ocupacionP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 20, 20));
 
-        jLabel1.setText("Bus a aeropuerto:");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        txtBusM.setText("Bus a aeropuerto:");
+        jPanel2.add(txtBusM, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
-        jLabel2.setText("Bus a ciudad:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+        txtBusMC.setText("Bus a ciudad:");
+        jPanel2.add(txtBusMC, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
 
         inputBusMadrid.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputBusMadrid.setEnabled(false);
@@ -627,19 +665,19 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputBusAeroM.setEnabled(false);
         jPanel2.add(inputBusAeroM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 130, -1));
 
-        jLabel3.setText("Nº de Pasajeros en el aeropuerto:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 191, 30));
+        txtPasajerosM.setText("Nº de Pasajeros en el aeropuerto:");
+        jPanel2.add(txtPasajerosM, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 191, 30));
 
         inputPasajerosMadrid.setText("0");
         inputPasajerosMadrid.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputPasajerosMadrid.setEnabled(false);
         jPanel2.add(inputPasajerosMadrid, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 50, 30));
 
-        jLabel4.setText("Rodaje:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
+        txtRodajeM.setText("Rodaje:");
+        jPanel2.add(txtRodajeM, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
 
-        jLabel5.setText("Hangar: ");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
+        txtHangarM.setText("Hangar: ");
+        jPanel2.add(txtHangarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
 
         inputRodajeM.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputRodajeM.setEnabled(false);
@@ -649,37 +687,37 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputHangarM.setEnabled(false);
         jPanel2.add(inputHangarM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
-        jLabel6.setText("Taller: ");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
+        txtTallerM.setText("Taller: ");
+        jPanel2.add(txtTallerM, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
 
         inputTallerM.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputTallerM.setEnabled(false);
         jPanel2.add(inputTallerM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
 
-        jLabel7.setText("Estacionamiento:");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        txtEstacionamientoM.setText("Estacionamiento:");
+        jPanel2.add(txtEstacionamientoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
         inputEstacionamientoM.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputEstacionamientoM.setEnabled(false);
         jPanel2.add(inputEstacionamientoM, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 270, -1));
 
-        jLabel8.setText("Puerta 2:");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
+        txtP2M.setText("Puerta 2:");
+        jPanel2.add(txtP2M, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
-        jLabel9.setText("Puerta 3:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
+        txtP3M.setText("Puerta 3:");
+        jPanel2.add(txtP3M, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
-        jLabel10.setText("Pista 3:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
+        txtPista3M.setText("Pista 3:");
+        jPanel2.add(txtPista3M, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
 
-        jLabel11.setText("Puerta 5:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, -1, -1));
+        txtP5M.setText("Puerta 5:");
+        jPanel2.add(txtP5M, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, -1, -1));
 
-        jLabel12.setText("Puerta 6:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 350, -1, -1));
+        txtP6M.setText("Puerta 6:");
+        jPanel2.add(txtP6M, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 350, -1, -1));
 
-        jLabel13.setText("Pista 1:");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
+        txtPista1M.setText("Pista 1:");
+        jPanel2.add(txtPista1M, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
 
         puerta5M.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         puerta5M.setEnabled(false);
@@ -706,8 +744,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         puerta4M.setEnabled(false);
         jPanel2.add(puerta4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, 110, -1));
 
-        jLabel14.setText("Puerta 1:");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
+        txtP1M.setText("Puerta 1:");
+        jPanel2.add(txtP1M, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
 
         pista1M.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         pista1M.setEnabled(false);
@@ -717,14 +755,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
         pista3M.setEnabled(false);
         jPanel2.add(pista3M, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
 
-        jLabel15.setText("Puerta 4:");
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
+        txtP4M.setText("Puerta 4:");
+        jPanel2.add(txtP4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
 
-        jLabel16.setText("Pista 4:");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
+        txtPista4M.setText("Pista 4:");
+        jPanel2.add(txtPista4M, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
 
-        jLabel17.setText("Pista 2:");
-        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
+        txtPista2M.setText("Pista 2:");
+        jPanel2.add(txtPista2M, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
 
         pista2M.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         pista2M.setEnabled(false);
@@ -756,9 +794,9 @@ public class InterfazSimulador extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aerovías", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
 
-        jLabel35.setText("Madrid - Barcelona: ");
+        txtAeroMB.setText("Madrid - Barcelona: ");
 
-        jLabel36.setText("Barcelona - Madrid: ");
+        txtAeroBM.setText("Barcelona - Madrid: ");
 
         inputAerovMB.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputAerovMB.setEnabled(false);
@@ -773,8 +811,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtAeroBM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtAeroMB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -786,11 +824,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel35)
+                    .addComponent(txtAeroMB)
                     .addComponent(inputAerovMB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel36)
+                    .addComponent(txtAeroBM)
                     .addComponent(inputAerovBM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -798,11 +836,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AEROPUERTO BARCELONA", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel18.setText("Bus a aeropuerto:");
-        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        txtBusB.setText("Bus a aeropuerto:");
+        jPanel4.add(txtBusB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
-        jLabel19.setText("Bus a ciudad:");
-        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+        txtBus2B.setText("Bus a ciudad:");
+        jPanel4.add(txtBus2B, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
 
         inputBusBarcelona.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputBusBarcelona.setEnabled(false);
@@ -812,19 +850,19 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputBusAeroB.setEnabled(false);
         jPanel4.add(inputBusAeroB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 110, 130, -1));
 
-        jLabel20.setText("Nº de Pasajeros en el aeropuerto:");
-        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 191, 30));
+        txtPasajerosB.setText("Nº de Pasajeros en el aeropuerto:");
+        jPanel4.add(txtPasajerosB, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 191, 30));
 
         inputPasajerosBarcelona.setText("0");
         inputPasajerosBarcelona.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputPasajerosBarcelona.setEnabled(false);
         jPanel4.add(inputPasajerosBarcelona, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 50, 30));
 
-        jLabel21.setText("Rodaje:");
-        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
+        txtRodajeB.setText("Rodaje:");
+        jPanel4.add(txtRodajeB, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, -1, -1));
 
-        jLabel22.setText("Hangar: ");
-        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
+        txtHangarB.setText("Hangar: ");
+        jPanel4.add(txtHangarB, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
 
         inputRodajeB.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputRodajeB.setEnabled(false);
@@ -834,37 +872,37 @@ public class InterfazSimulador extends javax.swing.JFrame {
         inputHangarB.setEnabled(false);
         jPanel4.add(inputHangarB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 270, -1));
 
-        jLabel23.setText("Taller: ");
-        jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
+        txtTallerB.setText("Taller: ");
+        jPanel4.add(txtTallerB, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
 
         inputTallerB.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputTallerB.setEnabled(false);
         jPanel4.add(inputTallerB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 190, 270, -1));
 
-        jLabel24.setText("Estacionamiento:");
-        jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        txtEstacionamientoB.setText("Estacionamiento:");
+        jPanel4.add(txtEstacionamientoB, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
         inputEstacionamientoB.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         inputEstacionamientoB.setEnabled(false);
         jPanel4.add(inputEstacionamientoB, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 270, -1));
 
-        jLabel25.setText("Puerta 2:");
-        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
+        txtP2B.setText("Puerta 2:");
+        jPanel4.add(txtP2B, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
-        jLabel26.setText("Puerta 3:");
-        jPanel4.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
+        txtP3B.setText("Puerta 3:");
+        jPanel4.add(txtP3B, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
-        jLabel27.setText("Pista 3:");
-        jPanel4.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
+        txtPista3B.setText("Pista 3:");
+        jPanel4.add(txtPista3B, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, -1, -1));
 
-        jLabel28.setText("Puerta 5:");
-        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, -1, -1));
+        txtP5B.setText("Puerta 5:");
+        jPanel4.add(txtP5B, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, -1, -1));
 
-        jLabel29.setText("Puerta 6:");
-        jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 350, -1, -1));
+        txtP6B.setText("Puerta 6:");
+        jPanel4.add(txtP6B, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 350, -1, -1));
 
-        jLabel30.setText("Pista 1:");
-        jPanel4.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
+        txtPista1B.setText("Pista 1:");
+        jPanel4.add(txtPista1B, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
 
         puerta5B.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         puerta5B.setEnabled(false);
@@ -890,8 +928,8 @@ public class InterfazSimulador extends javax.swing.JFrame {
         puerta4B.setEnabled(false);
         jPanel4.add(puerta4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, 110, -1));
 
-        jLabel31.setText("Puerta 1:");
-        jPanel4.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
+        txtP1B.setText("Puerta 1:");
+        jPanel4.add(txtP1B, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
 
         pista1B.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         pista1B.setEnabled(false);
@@ -901,14 +939,14 @@ public class InterfazSimulador extends javax.swing.JFrame {
         pista3B.setEnabled(false);
         jPanel4.add(pista3B, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 400, 110, -1));
 
-        jLabel32.setText("Puerta 4:");
-        jPanel4.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
+        txtP4B.setText("Puerta 4:");
+        jPanel4.add(txtP4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 290, -1, -1));
 
-        jLabel33.setText("Pista 4:");
-        jPanel4.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
+        txtPista4B.setText("Pista 4:");
+        jPanel4.add(txtPista4B, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, -1, -1));
 
-        jLabel34.setText("Pista 2:");
-        jPanel4.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
+        txtPista2b.setText("Pista 2:");
+        jPanel4.add(txtPista2b, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 430, -1, -1));
 
         pista2B.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         pista2B.setEnabled(false);
@@ -1014,8 +1052,11 @@ public class InterfazSimulador extends javax.swing.JFrame {
             pausado = false; 
             bEstadisticas.setVisible(pausado);
             lPausar.lock();
-            simuladorPausado.signalAll();
-            lPausar.unlock();
+            try {
+                simuladorPausado.signalAll();
+            } finally {
+                lPausar.unlock();
+            }
         }
     }//GEN-LAST:event_bPausarActionPerformed
     /**
@@ -1050,42 +1091,6 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField inputRodajeM;
     private javax.swing.JTextField inputTallerB;
     private javax.swing.JTextField inputTallerM;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1120,5 +1125,41 @@ public class InterfazSimulador extends javax.swing.JFrame {
     private javax.swing.JTextField puerta5M;
     private javax.swing.JTextField puerta6B;
     private javax.swing.JTextField puerta6M;
+    private javax.swing.JLabel txtAeroBM;
+    private javax.swing.JLabel txtAeroMB;
+    private javax.swing.JLabel txtBus2B;
+    private javax.swing.JLabel txtBusB;
+    private javax.swing.JLabel txtBusM;
+    private javax.swing.JLabel txtBusMC;
+    private javax.swing.JLabel txtEstacionamientoB;
+    private javax.swing.JLabel txtEstacionamientoM;
+    private javax.swing.JLabel txtHangarB;
+    private javax.swing.JLabel txtHangarM;
+    private javax.swing.JLabel txtP1B;
+    private javax.swing.JLabel txtP1M;
+    private javax.swing.JLabel txtP2B;
+    private javax.swing.JLabel txtP2M;
+    private javax.swing.JLabel txtP3B;
+    private javax.swing.JLabel txtP3M;
+    private javax.swing.JLabel txtP4B;
+    private javax.swing.JLabel txtP4M;
+    private javax.swing.JLabel txtP5B;
+    private javax.swing.JLabel txtP5M;
+    private javax.swing.JLabel txtP6B;
+    private javax.swing.JLabel txtP6M;
+    private javax.swing.JLabel txtPasajerosB;
+    private javax.swing.JLabel txtPasajerosM;
+    private javax.swing.JLabel txtPista1B;
+    private javax.swing.JLabel txtPista1M;
+    private javax.swing.JLabel txtPista2M;
+    private javax.swing.JLabel txtPista2b;
+    private javax.swing.JLabel txtPista3B;
+    private javax.swing.JLabel txtPista3M;
+    private javax.swing.JLabel txtPista4B;
+    private javax.swing.JLabel txtPista4M;
+    private javax.swing.JLabel txtRodajeB;
+    private javax.swing.JLabel txtRodajeM;
+    private javax.swing.JLabel txtTallerB;
+    private javax.swing.JLabel txtTallerM;
     // End of variables declaration//GEN-END:variables
 }

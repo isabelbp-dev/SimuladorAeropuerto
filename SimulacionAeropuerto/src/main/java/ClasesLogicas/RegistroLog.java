@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Clase empleada para el registro log del programa
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 public class RegistroLog {
     private static RegistroLog instance;
@@ -19,9 +19,7 @@ public class RegistroLog {
     private RegistroLog() {
         try {
             writer = new BufferedWriter(new FileWriter("evolucionAeropuerto.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
     }
 
     //Métodos propios de la clase
@@ -48,9 +46,7 @@ public class RegistroLog {
             writer.write(registro);
             writer.newLine();
             writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
     }
     /**
      * Método para cerrar el buffer de la clase
@@ -58,8 +54,6 @@ public class RegistroLog {
     public synchronized void close() {
         try {
             writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
     }
 }

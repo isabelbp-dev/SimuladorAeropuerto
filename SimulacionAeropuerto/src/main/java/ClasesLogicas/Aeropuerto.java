@@ -9,21 +9,21 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Clase que representa a los aeropueros del simulador.
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class Aeropuerto {
     RegistroLog logger = RegistroLog.getInstance();
     //Atributos
-    private String nombre;
+    private final String nombre;
     private int ocupacion;
-    private InterfazSimulador simulador;
-    ArrayList<String> puertasEmbarque = new ArrayList<>(Collections.nCopies(6,null));
-    ArrayList<String> pistas = new ArrayList<>(Collections.nCopies(4, null));
-    HashSet<String> hangar = new HashSet<>();
-    HashSet<String> rodaje = new HashSet<>();
-    HashSet<String> estacionamiento = new HashSet<>();
-    HashSet<String> taller = new HashSet<>();
+    private final InterfazSimulador simulador;
+    private final ArrayList<String> puertasEmbarque = new ArrayList<>(Collections.nCopies(6,null));
+    private final ArrayList<String> pistas = new ArrayList<>(Collections.nCopies(4, null));
+    private final HashSet<String> hangar = new HashSet<>();
+    private final HashSet<String> rodaje = new HashSet<>();
+    private final HashSet<String> estacionamiento = new HashSet<>();
+    private final HashSet<String> taller = new HashSet<>();
     
     //Atributos para la comunicación y sincronización de...
     //de buses
@@ -99,9 +99,10 @@ public class Aeropuerto {
     /**
      * Método para actualizar el número de pasajeros en el actual en el simulador, bien sea por la llegada o la salida de estos
      * @param num: Int que indica el número de pasajeros que hay actualmente en el aeropuerto
+     * @throws java.lang.InterruptedException
      */
     public void actualizarNumPasajeros(int num) throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modPasajerosM(num);
         }else{
             simulador.modPasajerosB(num);
@@ -120,6 +121,7 @@ public class Aeropuerto {
      * Método que mengua el número de pasajeros que hay actualmente en el aeropuerto, donde tratará de sacar "num" pasajeros para un avión o bus
      * @param num: Número de pasajeros que trataremos de sacar del aeropuerto
      * @return int: Número de pasajeros que finalmente han salido del aeropuerto. Puede ser menor que num en caso de que en el aeropuerto no haya suficientes pasajeros
+     * @throws java.lang.InterruptedException
      */
     public synchronized int salidaPasajeros(int num) throws InterruptedException{
         simulador.pausar();
@@ -136,30 +138,38 @@ public class Aeropuerto {
     /**
      * Método para indicar la llegada de un bus al aeropuerto, actualizando los datos correspondientes en el simulador
      * @param id: Id del bus que acaba de llegar al aeropuerto
+     * @throws java.lang.InterruptedException
      */
     public void llegadaBus(String id) throws InterruptedException{
         llegadaB.lock();
-        simulador.pausar();
-        if(nombre == "Madrid"){
-           simulador.modAeroM(id);
-        }else{
-            simulador.modAeroB(id);
+        try {
+            simulador.pausar();
+            if("Madrid".equals(nombre)){
+                simulador.modAeroM(id);
+            }else{
+                simulador.modAeroB(id);
+            }
+        } finally {
+            llegadaB.unlock();
         }
-        llegadaB.unlock();
     }
     /**
-     * Método que indica que un bus va a salir del aeropuerto, camino a la ciudad. De igual forma, lo indica en el simulador
+     * Método que indica que un bus va a salir del aeropuerto, camino a la ciudad.De igual forma, lo indica en el simulador
      * @param id: Id del bus que sale del aeropuerto
+     * @throws java.lang.InterruptedException
      */
     public void salidaBus(String id) throws InterruptedException{
         salidaB.lock();
-        simulador.pausar();
-        if(nombre == "Madrid"){
-           simulador.modBusCiudadM(id);
-        }else{
-            simulador.modBusCiudadB(id);
+        try {
+            simulador.pausar();
+            if("Madrid".equals(nombre)){
+                simulador.modBusCiudadM(id);
+            }else{
+                simulador.modBusCiudadB(id);
+            }
+        } finally {
+            salidaB.unlock();
         }
-        salidaB.unlock();
     }
     
     //Solicitudes, asignaciones y salidas de las puertas de embarque
@@ -167,6 +177,7 @@ public class Aeropuerto {
      * Método que sirve para que un avión solicite una puerta de embarque
      * @param id: Id del avión que solicita la puerta de embarque
      * @return Object[]: Lista con dos campos, el primero el número de la puerta que ha sido asignada al avión, y el segúndo el gráfico en el que indicaremos la ocupación del avión
+     * @throws java.lang.InterruptedException
      */
     public Object[] solPuertaEmbarque(String id) throws InterruptedException{
         puertas.lock();
@@ -191,6 +202,7 @@ public class Aeropuerto {
      * Método que sirve para solicitar la puerta de desembarque de un avión
      * @param id: Id del avión que solicita la puerta de desembarque
      * @return int: Número de la puerta de desembarque asignada al avión
+     * @throws java.lang.InterruptedException
      */
     public int solPuertaDesembarque(String id) throws InterruptedException{
         puertas.lock();
@@ -214,28 +226,33 @@ public class Aeropuerto {
     /**
      * Método que sirve para desocupar una puerta, ya sea de embarque o de desembarque
      * @param n: Número de la puerta que queremos desocupar
+     * @throws java.lang.InterruptedException
      */
     public void liberarPuerta(int n) throws InterruptedException{
         puertas.lock();
-        simulador.pausar();
-        if(n > 0){
-            puertaDesembarque.signalAll();
-        }if(n < 5){
-            puertaEmbarque.signalAll();
+        try {
+            simulador.pausar();
+            if(n > 0){
+                puertaDesembarque.signalAll();
+            }if(n < 5){
+                puertaEmbarque.signalAll();
+            }
+            puertasEmbarque.set(n, null);
+            actualizarPuertas(n, "");
+        } finally {
+            puertas.unlock();
         }
-        puertasEmbarque.set(n, null);
-        actualizarPuertas(n, "");
-        puertas.unlock();
     }
     /**
      * Método que actualiza la información de las puertas en el simulador
      * @param puerta: Puerta que ha sido modificada, y que por tanto, requiere ser actualizada
      * @param id: Id del avión al que se ha asignado la puerta. En caso de que la modificación haga referencia a la liberación de la puerta, será null
      * @return Gráfico que utilizaremos para indicar la ocupación de un avión respecto a la capacidad de cada puerta
+     * @throws java.lang.InterruptedException
      */
     public CircularProgressBar actualizarPuertas(int puerta, String id) throws InterruptedException{
         CircularProgressBar c;
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             c = simulador.modPuertasM(puerta, id);
         }else{
             c = simulador.modPuertasB(puerta, id);
@@ -249,6 +266,7 @@ public class Aeropuerto {
      * Método que sirve para solicitar una pista de despegue para un avión
      * @param id: Id del avión que solicita la puerta de despegue
      * @param pasajeros: Número de pasajeros que transporta el avión
+     * @throws java.lang.InterruptedException
      */
     public void solPistaDespegue(String id, int pasajeros) throws InterruptedException{
         semPistas.acquire();
@@ -265,6 +283,7 @@ public class Aeropuerto {
     /**
      * Método que sirve para solicitar una pista de aterrizaje para un avión
      * @param a: Avión que solicita la pista de aterrizaje
+     * @throws java.lang.InterruptedException
      */
     public void solPistaAterrizaje(Avion a) throws InterruptedException{
         boolean encontrada;
@@ -280,7 +299,7 @@ public class Aeropuerto {
         int pista = pistas.indexOf(null);
         ocuparPista(pista, a.getId());
         logger.registrarEvento("Avión " + a.getId() + " (" + a.getOcupacion() + " pasajeros) accede a pista " + pista + " para aterrizar. ");
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.salirAerovBM(a);
         }else{
             simulador.salirAerovMB(a);
@@ -292,6 +311,7 @@ public class Aeropuerto {
      * Método que sirve para ocupar una pista una vez esta ha sido asignada
      * @param pista: Pista que ha sido asignada al avión
      * @param id: Id del avión que va a ocupar la pista
+     * @throws java.lang.InterruptedException
      */
     public void ocuparPista(int pista, String id) throws InterruptedException{
         pistas.set(pista, id);
@@ -301,24 +321,29 @@ public class Aeropuerto {
     /**
      * Método que sirve para liberar una pista de aterrizaje o de despegue, dejándola libre para futuras operaciones
      * @param pista: Número de la pista que vamos a liberar
+     * @throws java.lang.InterruptedException
      */
     public void liberarPista(int pista) throws InterruptedException{
         lPistas.lock();
-        simulador.pausar();
-        if(!"Cerrada".equals(pistas.get(pista))){
-            pistas.set(pista, null);
-            semPistas.release();
+        try {
+            simulador.pausar();
+            if(!"Cerrada".equals(pistas.get(pista))){
+                pistas.set(pista, null);
+                semPistas.release();
+            }
+            actualizarPistas(pista, null);
+        } finally {
+            lPistas.unlock();
         }
-        actualizarPistas(pista, null);
-        lPistas.unlock();
     }
     /**
      * Método que actualiza los datos de las pistas en el simulador
      * @param pista: Número de la pista que ha sido modificada y que por tanto hay que actualizar en el simulador
      * @param id: Id del avión que a ocupado la pista. En caso de que la pista quede libre, este valor será null 
+     * @throws java.lang.InterruptedException 
      */
     public void actualizarPistas(int pista, String id) throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modPistasM(pista, id);
         }else{
             simulador.modPistasB(pista, id);
@@ -329,17 +354,19 @@ public class Aeropuerto {
     /**
      * Método que cierra una pista de despegue/aterrizaje
      * @param pista: Número de la pista a cerrar
+     * @throws java.lang.InterruptedException
      */
     public void cerrarPista(int pista) throws InterruptedException{
         lPistas.lock();
-        System.out.println("Permisos antes del cierre de la pista: " + semPistas.availablePermits());
-        if(pistas.get(pista-1)== null){
-            semPistas.acquire();
+        try {
+            if(pistas.get(pista-1)== null){
+                semPistas.acquire();
+            }
+            pistas.set(pista-1, "Cerrada");
+            logger.registrarEvento("La pista número " + pista + " de " + nombre + " ha sido cerrada. ");
+        } finally {
+            lPistas.unlock();
         }
-        pistas.set(pista-1, "Cerrada");
-        System.out.println("Permisos tras el cierre de la pista: " + semPistas.availablePermits());
-        System.out.println(pistas.toString());
-        lPistas.unlock();
     }
     /**
      * Método que abre una pista de despegue/aterrizaje
@@ -347,49 +374,58 @@ public class Aeropuerto {
      */
     public void abrirPista(int pista){
         lPistas.lock();
-        pistas.set(pista-1, null);
-        if(nombre == "Madrid"){
-            if(simulador.consultarPistaM(pista-1)){
-                semPistas.release();
-            }
-        }else{
-            if(simulador.consultarPistaB(pista-1)){
-                semPistas.release();
-            }
+        try {
+            pistas.set(pista-1, null);
+            if("Madrid".equals(nombre)){
+                if(simulador.consultarPistaM(pista-1)){
+                    semPistas.release();
+                }
+            }else{
+                if(simulador.consultarPistaB(pista-1)){
+                    semPistas.release();}}
+            logger.registrarEvento("La pista número " + pista + " de " + nombre + " ha sido abierta. ");
+        } finally {
+            lPistas.unlock();
         }
-        System.out.println("Permisos tras la abertura de la pista: " + semPistas.availablePermits());
-        System.out.println(pistas.toString());
-        lPistas.unlock();
     }
     
     //Llegada y salida de aviones al hangar
     /**
      * Método que sirve para indicar la llegada de un nuevo avión al hangar
      * @param id: Id del avión que llega al hangar
+     * @throws java.lang.InterruptedException
      */
     public void llegadaHangar(String id) throws InterruptedException{
         lHangar.lock();
-        simulador.pausar();
-        hangar.add(id);
-        actualizarHangar();
-        lHangar.unlock();
+        try {
+            simulador.pausar();
+            hangar.add(id);
+            actualizarHangar();
+        } finally {
+            lHangar.unlock();
+        }
     }
     /**
      * Método que sirve para indicar que un avión ha salido del hangar
      * @param id: Id del avión que sale del hangar
+     * @throws java.lang.InterruptedException
      */
     public void salidaHangar(String id) throws InterruptedException{
         lHangar.lock();
-        simulador.pausar();
-        hangar.remove(id);
-        actualizarHangar();
-        lHangar.unlock();
+        try {
+            simulador.pausar();
+            hangar.remove(id);
+            actualizarHangar();
+        } finally {
+            lHangar.unlock();
+        }
     }
     /**
      * Método que sirve para actualizar los datos del hangar actual en el simulador
+     * @throws java.lang.InterruptedException
      */
     public void actualizarHangar() throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modHangarM(hangar);
         }else{
             simulador.modHangarB(hangar);
@@ -400,30 +436,39 @@ public class Aeropuerto {
     /**
      * Método que sirve para indicar que un avión ha llegado al área de rodaje
      * @param id: Id del avión que acaba de llegar al área de rodaje
+     * @throws java.lang.InterruptedException
      */
     public void llegadaRodaje(String id) throws InterruptedException{
         lRodaje.lock();
-        simulador.pausar();
-        rodaje.add(id);
-        actualizarRodaje();
-        lRodaje.unlock();
+        try {
+            simulador.pausar();
+            rodaje.add(id);
+            actualizarRodaje();
+        } finally {
+            lRodaje.unlock();
+        }
     }
     /**
      * Método para indicar que un avión ha salido del área de rodaje
      * @param id: Id del avión que va a salir del área de rodaje
+     * @throws java.lang.InterruptedException
      */
     public void salidaRodaje(String id) throws InterruptedException{
         lRodaje.lock();
-        simulador.pausar();
-        rodaje.remove(id);
-        actualizarRodaje();
-        lRodaje.unlock();
+        try {
+            simulador.pausar();
+            rodaje.remove(id);
+            actualizarRodaje();
+        } finally {
+            lRodaje.unlock();
+        }
     }
     /**
      * Método que sirve para actualizar los datos del área de rodaje en el simulador
+     * @throws java.lang.InterruptedException
      */
     public void actualizarRodaje() throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modRodajeM(rodaje);
         }else{
             simulador.modRodajeB(rodaje);
@@ -434,30 +479,39 @@ public class Aeropuerto {
     /**
      * Método que sirve para indicar que un avión ha llegado al área de estacionamiento
      * @param id: Id del avión que acaba de llegar al área de estacionamiento
+     * @throws java.lang.InterruptedException
      */
     public void llegadaEstacionamiento(String id) throws InterruptedException{
         lEstacionamiento.lock();
-        simulador.pausar();
-        estacionamiento.add(id);
-        actualizarEstacionamiento();
-        lEstacionamiento.unlock();
+        try {
+            simulador.pausar();
+            estacionamiento.add(id);
+            actualizarEstacionamiento();
+        } finally {
+            lEstacionamiento.unlock();
+        }
     }
     /**
      * Método que sirve para indicar que un avión va a salir del área de estacionamiento
      * @param id: Id del avión que va a salir del área de estacionamiento
+     * @throws java.lang.InterruptedException
      */
     public void salidaEstacionamiento(String id) throws InterruptedException{
         lEstacionamiento.lock();
-        simulador.pausar();
-        estacionamiento.remove(id);
-        actualizarEstacionamiento();
-        lEstacionamiento.unlock();
+        try {
+            simulador.pausar();
+            estacionamiento.remove(id);
+            actualizarEstacionamiento();
+        } finally {
+            lEstacionamiento.unlock();
+        }
     }
     /**
      * Método que sirve para actualizar los datos del área de estacionamiento en el simulador
+     * @throws java.lang.InterruptedException
      */
     public void actualizarEstacionamiento() throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modEstacionamientoM(estacionamiento);
         }else{
             simulador.modEstacionamientoB(estacionamiento);
@@ -468,50 +522,65 @@ public class Aeropuerto {
     /**
      * Método que sirve para indicar que un avión esta realizando una revisión rápida en el taller
      * @param id: Id del avión que acaba de llegar al taller para realizar la revisión rápida
+     * @throws java.lang.InterruptedException
      */
     public void revisionRapida(String id) throws InterruptedException{
         semTaller.acquire();
         puertaTaller.lock();
-        simulador.pausar();
-        Thread.sleep(1000);
-        taller.add(id);
-        actualizarTaller();
-        logger.registrarEvento("Avión " + id + " accede al taller para una revisión rápida. ");
-        puertaTaller.unlock();
-        Thread.sleep(1000+(int)(Math.random()*4000));
-        puertaTaller.lock();
-        Thread.sleep(1000);
-        taller.remove(id);
-        actualizarTaller();
-        puertaTaller.unlock();
+        try {
+            try {
+                simulador.pausar();
+                Thread.sleep(1000);
+                taller.add(id);
+                actualizarTaller();
+                logger.registrarEvento("Avión " + id + " accede al taller para una revisión rápida. ");
+            } finally {
+                puertaTaller.unlock();
+            }
+            Thread.sleep(1000+(int)(Math.random()*4000));
+            puertaTaller.lock();
+            Thread.sleep(1000);
+            taller.remove(id);
+            actualizarTaller();
+        } finally {
+            puertaTaller.unlock();
+        }
         semTaller.release();
     }
     /**
      * Método que sirve para indicar que un avión esta realizando una revisión profunda en el taller
      * @param id: Id del avión que acaba de llegar al taller para realizar una revisión profunda
+     * @throws java.lang.InterruptedException
      */
     public void revisionProfunda(String id) throws InterruptedException{
         semTaller.acquire();
         simulador.pausar();
         puertaTaller.lock();
-        Thread.sleep(1000);
-        taller.add(id);
-        actualizarTaller();
-        logger.registrarEvento("Avión " + id + " accede al taller para una revisión profunda. ");
-        puertaTaller.unlock();
-        Thread.sleep(5000+(int)(Math.random()*5000));
-        puertaTaller.lock();
-        Thread.sleep(1000);
-        taller.remove(id);
-        actualizarTaller();
-        puertaTaller.unlock();
+        try {
+            try {
+                Thread.sleep(1000);
+                taller.add(id);
+                actualizarTaller();
+                logger.registrarEvento("Avión " + id + " accede al taller para una revisión profunda. ");
+            } finally {
+                puertaTaller.unlock();
+            }
+            Thread.sleep(5000+(int)(Math.random()*5000));
+            puertaTaller.lock();
+            Thread.sleep(1000);
+            taller.remove(id);
+            actualizarTaller();
+        } finally {
+            puertaTaller.unlock();
+        }
         semTaller.release();
     }
     /**
      * Método que sirve para actualizar los datos de los aviones que hay actualmente en el taller en el simulador
+     * @throws java.lang.InterruptedException
      */
     public void actualizarTaller() throws InterruptedException{
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.modTallerM(taller);
         }else{
             simulador.modTallerB(taller);
@@ -522,10 +591,11 @@ public class Aeropuerto {
     /**
      * Método usado para indicar que un avión esta usando una aerovía para volar hacia el otro aeropuerto
      * @param a: Avión que esta volando
+     * @throws java.lang.InterruptedException
      */
     public void volar(Avion a) throws InterruptedException{
         simulador.pausar();
-        if(nombre == "Madrid"){
+        if("Madrid".equals(nombre)){
             simulador.usoAeroviaMB(a);
         }else{
             simulador.usoAeroviaBM(a);

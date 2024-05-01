@@ -2,15 +2,15 @@ package ClasesLogicas;
 
 /**
  * Clase que genera los aviones del programa
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class GeneradorAviones implements Runnable{
     RegistroLog logger = RegistroLog.getInstance();
     
     //Atributos
-    private Aeropuerto aero1;
-    private Aeropuerto aero2;
+    private final Aeropuerto aero1;
+    private final Aeropuerto aero2;
     
     /**
      * Constructor del generador de aviones
@@ -25,6 +25,7 @@ public class GeneradorAviones implements Runnable{
     /**
      * Ciclo de vida del generador de aviones
      */
+    @Override
     public void run() {
         for(int i = 0; i < 8000; i++){
             try{
@@ -36,9 +37,7 @@ public class GeneradorAviones implements Runnable{
                     avion.start();
                 }
                 Thread.sleep(1000+(int)(Math.random()*2000));
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
+            }catch(InterruptedException e){}
         }
     }
 }

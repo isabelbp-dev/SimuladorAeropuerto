@@ -73,21 +73,21 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel15" min="-2" pref="73" max="-2" attributes="0"/>
+                                  <Component id="txtP1B" min="-2" pref="73" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="bPista1B" min="-2" pref="111" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="bPista3B" min="-2" pref="111" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jLabel18" min="-2" pref="55" max="-2" attributes="0"/>
+                                  <Component id="txtP3B" min="-2" pref="55" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel10" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel11" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel12" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel14" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel13" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
+                                      <Component id="txtPasajerosB" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtHangarB" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtTallerB" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtRodajeB" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtEstacionamientoB" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="15" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -102,13 +102,13 @@
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jLabel16" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Component id="txtP2B" min="-2" pref="73" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="bPista2B" min="-2" pref="111" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="bPista4B" min="-2" pref="111" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtP4B" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -120,40 +120,40 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtPasajerosB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputPasajerosB" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtHangarB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputHangarB" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtTallerB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputTallerB" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtEstacionamientoB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputEstacionamientoB" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtRodajeB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputRodajeB" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP1B" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP3B" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista1B" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista3B" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP4B" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP2B" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista4B" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista2B" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -163,27 +163,27 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel10">
+        <Component class="javax.swing.JLabel" name="txtPasajerosB">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Pasajeros en aeropuerto: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel11">
+        <Component class="javax.swing.JLabel" name="txtHangarB">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en hangar: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel12">
+        <Component class="javax.swing.JLabel" name="txtTallerB">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en taller: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel13">
+        <Component class="javax.swing.JLabel" name="txtEstacionamientoB">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en &#xe1;rea de estacionamiento: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel14">
+        <Component class="javax.swing.JLabel" name="txtRodajeB">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en &#xe1;rea de rodaje:  "/>
           </Properties>
@@ -228,22 +228,22 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel15">
+        <Component class="javax.swing.JLabel" name="txtP1B">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 1: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel16">
+        <Component class="javax.swing.JLabel" name="txtP2B">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 2: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel17">
+        <Component class="javax.swing.JLabel" name="txtP4B">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 4: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel18">
+        <Component class="javax.swing.JLabel" name="txtP3B">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 3: "/>
           </Properties>
@@ -302,21 +302,21 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel6" min="-2" pref="73" max="-2" attributes="0"/>
+                                  <Component id="txtP1M" min="-2" pref="73" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="bPista1M" min="-2" pref="111" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="bPista3M" min="-2" pref="111" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jLabel9" min="-2" pref="55" max="-2" attributes="0"/>
+                                  <Component id="txtP3M" min="-2" pref="55" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel1" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel2" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" min="-2" pref="163" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
+                                      <Component id="txtPasajerosM" alignment="0" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtHangarM" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtTallerM" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtRodajeM" min="-2" pref="163" max="-2" attributes="0"/>
+                                      <Component id="txtEstacionamientoM" alignment="0" min="-2" pref="222" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="37" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -331,13 +331,13 @@
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jLabel7" min="-2" pref="73" max="-2" attributes="0"/>
+                          <Component id="txtP2M" min="-2" pref="73" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="bPista2M" min="-2" pref="111" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="bPista4M" min="-2" pref="111" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtP4M" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -349,40 +349,40 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtPasajerosM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputPasajerosM" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtHangarM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputHangarM" alignment="3" pref="25" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="15" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtTallerM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputTallerM" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtEstacionamientoM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputEstacionamientoM" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtRodajeM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputRodajeM" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP1M" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP3M" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista1M" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista3M" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP4M" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtP2M" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista4M" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bPista2M" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -392,27 +392,27 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="txtPasajerosM">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Pasajeros en aeropuerto: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="txtHangarM">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en hangar: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="txtTallerM">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en taller: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="txtEstacionamientoM">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en &#xe1;rea de estacionamiento: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="txtRodajeM">
           <Properties>
             <Property name="text" type="java.lang.String" value="N&#xba; Aviones en &#xe1;rea de rodaje:  "/>
           </Properties>
@@ -457,22 +457,22 @@
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
+        <Component class="javax.swing.JLabel" name="txtP1M">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 1: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel7">
+        <Component class="javax.swing.JLabel" name="txtP2M">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 2: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel8">
+        <Component class="javax.swing.JLabel" name="txtP4M">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 4: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel9">
+        <Component class="javax.swing.JLabel" name="txtP3M">
           <Properties>
             <Property name="text" type="java.lang.String" value="Pista 3: "/>
           </Properties>
@@ -529,12 +529,12 @@
                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jLabel20" min="-2" pref="162" max="-2" attributes="0"/>
+                          <Component id="txtAeroMB" min="-2" pref="162" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="inputAerovMB" min="-2" pref="688" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="jLabel19" min="-2" pref="162" max="-2" attributes="0"/>
+                          <Component id="txtAeroBM" min="-2" pref="162" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="inputAerovBM" min="-2" pref="688" max="-2" attributes="0"/>
                       </Group>
@@ -548,12 +548,12 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="25" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtAeroMB" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputAerovMB" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtAeroBM" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="inputAerovBM" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
@@ -562,12 +562,12 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel19">
+        <Component class="javax.swing.JLabel" name="txtAeroBM">
           <Properties>
             <Property name="text" type="java.lang.String" value="Aerov&#xed;a Barcelona-Madrid:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel20">
+        <Component class="javax.swing.JLabel" name="txtAeroMB">
           <Properties>
             <Property name="text" type="java.lang.String" value="Aerov&#xed;a Madrid-Barcelona:"/>
           </Properties>

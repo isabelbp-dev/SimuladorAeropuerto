@@ -4,9 +4,9 @@ import java.util.LinkedHashMap;
 
 /**
  * Interfaz para mostrar las estadísticas actuales del programa una vez pausado
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
-public class EstadisticasActuales extends javax.swing.JFrame {
+public final class EstadisticasActuales extends javax.swing.JFrame {
     private final InterfazSimulador simulador;
     
     /**

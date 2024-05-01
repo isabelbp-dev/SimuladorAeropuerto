@@ -6,16 +6,16 @@ import java.util.logging.Logger;
 
 /**
  * Clase que representa a los aviones del simulador
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class Avion implements Runnable{
     RegistroLog logger = RegistroLog.getInstance();
     
     //Atributos
-    Random random = new Random();
-    private String id;
-    private int capacidad;
+    private final Random random = new Random();
+    private final String id;
+    private final int capacidad;
     private int ocupacion;
     private Aeropuerto aero;
     private int numVuelos;
@@ -69,6 +69,7 @@ public class Avion implements Runnable{
     //Métodos propios del avión
     /**
      * Método que simula la salida del avión, desde que llega al área de estacionamiento hasta que sale de la pista de despegue
+     * @throws java.lang.InterruptedException
      */
     public void salidaAvion() throws InterruptedException{
         aero.llegadaEstacionamiento(id);//Llegamos estacionamiento
@@ -99,6 +100,7 @@ public class Avion implements Runnable{
     }
     /**
      * Método que simula la llegada del avión al aeropuerto, desde la solicitud de la pista de aterrizaje hasta el desembarque de los pasajeros
+     * @throws java.lang.InterruptedException
      */
     public void llegadaAvion() throws InterruptedException{
         aero.solPistaAterrizaje(this);//Solicitan pista de aterrizaje
@@ -119,6 +121,7 @@ public class Avion implements Runnable{
     /**
      * Ciclo de vida del avión
      */
+    @Override
     public void run() {
         while(true){
             try {

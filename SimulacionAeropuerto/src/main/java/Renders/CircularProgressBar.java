@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * Clase que dibuja un gráfico circular
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class CircularProgressBar extends JPanel {

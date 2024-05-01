@@ -5,12 +5,12 @@ import java.util.Map;
 
 /**
  * Clase que representa gráficos de barras
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class BarChartPanel extends JPanel {
-    private Map<String, Integer> valores;
-    private int valorMaximo;
+    private final Map<String, Integer> valores;
+    private final int valorMaximo;
 
     /**
      * Constructor
