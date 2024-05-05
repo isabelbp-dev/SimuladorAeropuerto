@@ -1,38 +1,35 @@
 package ClasesLogicas;
-import Interfaz.InterfazSimulador;
 import java.util.Random;
 /**
  * Clase que representa a los autobuses del simulador
- * @author Isabel Barquilla
+ * @author Isabel Barquilla y Sandra Familiar
  */
 
 public class Autobus implements Runnable{
     RegistroLog logger = RegistroLog.getInstance();
-    Random random = new Random();
-    //Atributos 
-    private String id;
-    private int ocupacion;
-    private Aeropuerto aero;
-    private InterfazSimulador simulador;
+    private final Random random = new Random();
     
-    //Constructor
+    //Atributos 
+    private final String id;
+    private int ocupacion;
+    private final Aeropuerto aero;
+    
     /**
      * Constructor de la clase Autobús
      * @param cod: Codigo usado para la creación del ID del bús, correspondiente al número de bus creado
      * @param aeropuerto: Aeropuerto al que estará asociado el autobús
-     * @param s: Simulador donde se mostrarán las distintas operaciones hechas por el bus
      */
-    public Autobus(String cod, Aeropuerto aeropuerto, InterfazSimulador s){
+    public Autobus(String cod, Aeropuerto aeropuerto){
         this.id = "B-" + cod;
         this.ocupacion = 0;
         this.aero = aeropuerto;
-        this.simulador = s;
         logger.registrarEvento("Bus " + id + " es creado. ");
     }
     
     /**
      * Ciclo de vida del bús
      */
+    @Override
     public void run() {
         while(true){
             try{
